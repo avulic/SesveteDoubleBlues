@@ -24,7 +24,7 @@
 }(function (jQuery) {
 
   "use strict";
-
+	
   // globals
   var domfocus = false,
     mousefocus = false,
@@ -2543,7 +2543,7 @@
         q: false
       });
 
-      (passiveSupported && active) ? el.addEventListener(name, fn, { passive: false, capture: bubble }) : el.addEventListener(name, fn, bubble || false);
+	  (passiveSupported && (active || el == window.document || el == window.document.body || el == window)) ? el.addEventListener(name, fn, { passive: false, capture: bubble }) : el.addEventListener(name, fn, bubble || false);
     };
 
     this._unbind = function (el, name, fn, bub) { // primitive unbind
