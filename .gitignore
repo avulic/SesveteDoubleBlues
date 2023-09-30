@@ -1,2 +1,2 @@
-DBS/test_spa/js/scraper/credentials.json
-DBS/test_spa/js/scraper/node_modules
+js/scraper/credentials.json
+js/scraper/node_module/*
