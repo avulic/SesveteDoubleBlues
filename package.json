@@ -1,0 +1,15 @@
+{
+  "name": "test_spa",
+  "version": "1.0.0",
+  "description": "A simple implementation of a SPA with plain Js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "locomotive-scroll": "^4.1.4",
+    "rellax": "^1.12.1"
+  }
+}

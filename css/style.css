@@ -306,3 +306,10 @@ footer {
 div {
     /* border: red solid 2px; */
 }
+
+.fixme {
+    background: green;
+    color: white;
+    text-align: center;
+    width: 100%;
+}

@@ -1,26 +1,15 @@
-'use stict';
-
-export function Route(name, htmlName, defaultRoute) {
-    try {
+export class Route {
+    constructor(name, htmlName, defaultRoute) {
         if (!name || !htmlName) {
-            throw 'error: name and htmlName params are mandatories';
+            throw 'error: name and htmlName params are mandatory';
         }
-        this.constructor(name, htmlName, defaultRoute);
-    } catch (e) {
-        console.error(e);
-    }
-}
 
-Route.prototype = {
-    name: undefined,
-    htmlName: undefined,
-    default: undefined,
-    constructor: function (name, htmlName, defaultRoute) {
         this.name = name;
         this.htmlName = htmlName;
         this.default = defaultRoute;
-    },
-    isActiveRoute: function (hashedPath) {
+    }
+
+    isActiveRoute(hashedPath) {
         return hashedPath.replace('#', '') === this.name;
     }
 }

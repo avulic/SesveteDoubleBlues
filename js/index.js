@@ -1,3 +1,5 @@
+
+
 // Function to load and display content
 export async function fetchComponent(fileName) {
     return fetch(fileName)
@@ -16,41 +18,27 @@ export async function fetchComponent(fileName) {
         });
 }
 
-
-export function loadContent(pageName, containerName) {
-    const contentContainer = document.getElementById(containerName);
-    const fileName = `${pageName}.html`;
-
-    fetchComponent(fileName).then((html) => {
-        contentContainer.innerHTML = html;
-    })
+export function parseElement(content) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    if (doc) {
+        return doc;
+    }
 }
 
-// Function to handle navigation links
-function handleNavigation() {
-    const navLinks = document.querySelectorAll('nav a');
-    navLinks.forEach((link) => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const pageName = link.getAttribute('href').substring(1);
-            loadContent(pageName, 'content');
-        });
-    });
+export function parseTemplateElement(content) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const template = doc.querySelector('template');
+    if (template) {
+        return template;
+    }
 }
 
-// Initialize the app
-function init() {
-    handleNavigation();
-    // Load the initial page (e.g., home.html)
-    loadContent('home');
-}
-
-// Call the init function when the DOM is ready
-//document.addEventListener('DOMContentLoaded', init);
 
 
 function makeElement() {
-    //Array of image sources
+    // Array of image sources
     const imageSources = [
         "./images/tim.jpg",
         "./images/tim2.jpg",
@@ -88,18 +76,21 @@ function makeElement() {
     });
 }
 
-$(window).on('load', function () {
-    setTimeout(removeLoader, 500); //wait for page load PLUS two seconds.
+window.addEventListener('load', function () {
+    setTimeout(removeLoader, 500); // wait for page load PLUS two seconds.
     makeElement();
 });
 
 function removeLoader() {
-    $("#loadingDiv").fadeOut(500, function () {
-        // fadeOut complete. Remove the loading div
-        $("#loadingDiv").remove(); //makes page more lightweight 
-    });
+    const loadingDiv = document.getElementById("loadingDiv");
+    if (loadingDiv) {
+        loadingDiv.style.transition = "opacity 0.5s";
+        loadingDiv.style.opacity = "0";
+        setTimeout(() => {
+            loadingDiv.remove(); // remove the loading div after the fade out
+        }, 500);
+    }
 }
-
 
 
 
@@ -122,6 +113,38 @@ function toggleShop() {
         galleryDiv.style.display = "none";
     }
 }
-$(window).scroll(function () {
-    $("#section01").css("opacity", 1 - $(window).scrollTop() / 1100);
-});
+// $(window).scroll(function () {
+//     $("#section01").css("opacity", 1 - $(window).scrollTop() / 1100);
+// });
+
+
+
+function parallax() {
+    // Get the element with class 'fixme'
+    var fixme = document.querySelector('.fixme');
+
+    // Get the initial top position of the 'fixme' element
+    var fixmeTop = fixme.getBoundingClientRect().top;
+
+    // Add a scroll event listener to the window
+    window.addEventListener('scroll', function () {
+        // Get the current scroll position
+        var currentScroll = window.scrollY;
+
+        // Check if the current scroll position is greater than or equal to the initial top position of 'fixme'
+        if (currentScroll >= fixmeTop) {
+            // If true, set the position of 'fixme' to 'fixed'
+            fixme.style.position = 'fixed';
+            fixme.style.top = '0';
+            fixme.style.left = '0';
+        } else {
+            // If false, set the position of 'fixme' to 'static'
+            fixme.style.position = 'static';
+        }
+    });
+
+}
+
+
+
+

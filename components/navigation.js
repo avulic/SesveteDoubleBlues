@@ -1,23 +1,39 @@
-import { fetchComponent } from "../js/index.js";
+import { fetchComponent, parseElement } from "../js/index.js";
 
 class Navigation extends HTMLElement {
     constructor() {
         super();
+
     }
+
     connectedCallback() {
-        fetchComponent('./components/navigation.html').then((innerHtml) => {
-            this.innerHTML = innerHtml
+        fetchComponent('./components/navigation.html').then((content) => {
+            if (content) {
+                this.innerHTML = content;
+                var element = parseElement(content)
+                this.executeScriptTag(element);
+            }
         });
     }
+
+    executeScriptTag(element) {
+        // Get the script element in the Shadow DOM.
+        const scriptElements = element.getElementsByTagName('script');
+        // Check if a script element exists.
+        if (scriptElements.length > 1) {
+            for (var scriptElement of scriptElements) {
+                const script = document.createElement('script');
+                script.textContent = scriptElement.textContent;
+                document.body.appendChild(script);
+            };
+            //scriptElements.remove();
+        }
+        if (scriptElements.length === 1) {
+            const script = document.createElement('script');
+            script.textContent = scriptElements[0].textContent;
+            document.body.appendChild(script);
+        }
+    }
 }
-
-
-function showContent() {
-    let temp = document.getElementsByTagName("template")[0];
-    let clon = temp.content.cloneNode(true);
-    document.body.appendChild(clon);
-}
-
-
 
 customElements.define('navigation-component', Navigation);

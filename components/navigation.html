@@ -1,20 +1,12 @@
 <div id="navigation" class="container p-2">
+
     <div style=" background-color: rgb(10 9 10 / 96%);" class="row justify-content-center custom-rounded-div">
         <div class="col-lg-8">
             <div class="instagram-stories">
-                <div onclick=""
-                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
-                    <div class="story-icon">
-                        <a href="#index">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
-                        </a>
-                    </div>
-                    <span style="color: #f0f0f0;">Home</span>
-                </div>
-                <div onclick=""
+                <div id="games" onclick="showInlineNavigation()"
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
-                        <a href="#gallery">
+                        <a href="#games">
                             <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
                         </a>
                     </div>
@@ -22,7 +14,7 @@
                         <span style="color: #f0f0f0;">Games</span>
                     </div>
                 </div>
-                <div onclick=""
+                <div onclick="hideInlineNavigation()"
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <a href="#shop">
@@ -33,7 +25,7 @@
                         <span style="color: #f0f0f0;">Shop</span>
                     </div>
                 </div>
-                <div onclick="toggleGallery()"
+                <div onclick=""
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
@@ -42,16 +34,7 @@
                         <span style="color: #f0f0f0;">Events</span>
                     </div>
                 </div>
-                <div onclick="toggleGallery()"
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
-                    <div class="story-icon">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
-                    </div>
-                    <div>
-                        <span style="color: #f0f0f0;">About</span>
-                    </div>
-                </div>
-                <div onclick="toggleGallery()"
+                <div onclick=""
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
@@ -60,25 +43,108 @@
                         <span style="color: #f0f0f0;">Players</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="navigation-inside" class="container m-1  custom-rounded-div">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="instagram-stories">
-                    <div class="story-icon" onclick="toggleGallery()" style="z-index: 9;">
+                <div onclick=""
+                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                    <div class="story-icon">
                         <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
                     </div>
-                    <div class="story-icon" onclick="toggleGallery()" style="z-index: 9;">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
-                    </div>
-                    <div class="story-icon" onclick="toggleGallery()" style="z-index: 9;">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                    <div>
+                        <span style="color: #f0f0f0;">About</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="navigation-inside" style=" background-color: rgba(243, 243, 243, 0.96); display: none;"
+        class="row justify-content-center custom-rounded-div">
+        <div class="col-lg-4">
+            <div class="instagram-stories" style=" color: #000000;">
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                    <div class="story-icon">
+                        <a href="#1_kolo">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        </a>
+                    </div>
+                    <span>1. kolo</span>
+                </div>
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                    <div class="story-icon">
+                        <a href="#2_kolo">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        </a>
+                    </div>
+                    <span>2. kolo</span>
+                </div>
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                    <div class="story-icon">
+                        <a href="#3_kolo">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        </a>
+                    </div>
+                    <span>3. kolo</span>
+                </div>
+                <div
+                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                    <div class="story-icon">
+                        <a href="#4_kolo">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        </a>
+                    </div>
+                    <span>4. kolo</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    function stickyScroll() {
+        // Get the element with class 'fixme'
+        var fixme = document.querySelector('.fixme');
+
+        // Get the initial top position of the 'fixme' element
+        var fixmeTop = fixme.getBoundingClientRect().top;
+
+        // Add a scroll event listener to the window
+        window.addEventListener('scroll', function () {
+            // Get the current scroll position
+            var currentScroll = window.scrollY;
+
+            // Check if the current scroll position is greater than or equal to the initial top position of 'fixme'
+            if (currentScroll >= fixmeTop) {
+                // If true, set the position of 'fixme' to 'fixed'
+                fixme.style.position = 'fixed';
+                fixme.style.top = '0';
+                fixme.style.left = '0';
+            } else {
+                // If false, set the position of 'fixme' to 'static'
+                fixme.style.position = 'static';
+            }
+        });
+    }
+
+    function destroyLuxy() {
+        // Cancel animation frames
+        //luxy.cancel();
+
+        // Remove Luxy class from HTML elements
+        //const luxyElements = document.querySelectorAll('.luxy, .luxy-el');
+        // luxyElements.forEach((element) => {
+        //     element.classList.remove('luxy', 'luxy-el');
+        // });
+    }
+
+    // Call this function when you want to destroy Luxy
+    //stickyScroll();
+    function showInlineNavigation() {
+        $("#navigation-inside").toggle();
+    }
+    function hideInlineNavigation() {
+        setTimeout(() => { $("#navigation-inside").hide() }, 100)
+
+    }
+</script>
