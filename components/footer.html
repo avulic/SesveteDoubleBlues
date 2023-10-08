@@ -1,19 +1,26 @@
 <footer style="padding-bottom: 10px;">
-    <div class="container-fluid">
+    <div class="" style="padding: 0;">
+        <div id="sponsors-wraper">
+            <div id="sponsors-slider" class="d-flex flex-row justify-content-around">
+                <img class="slide" src="./images/logo/bertovic_white.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/bokart.svg" width="100px" height="100px" alt=""
+                    style="background-color: white;">
+                <img class="slide" src="../images/logo/NK SESVETE grb.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/irsag.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/manana.svg" width="100px" height="100px" alt="">
 
-        <div id="sponsors" class="row m-4">
-            <div class="col">
-                <img src="./images/tim.jpg" width="100px" height="100px" alt="">
-            </div>
-            <div class="col">
-                <img src="./images/tim.jpg" width="100px" height="100px" alt="">
-            </div>
-            <div class="col">
-                <img src="./images/tim.jpg" width="100px" height="100px" alt="">
+                <img class="slide" src="./images/logo/bertovic_white.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/bokart.svg" width="100px" height="100px" alt=""
+                    style="background-color: white;">
+                <img class="slide" src="../images/logo/NK SESVETE grb.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/irsag.svg" width="100px" height="100px" alt="">
+                <img class="slide" src="../images/logo/manana.svg" width="100px" height="100px" alt=""
+                    style="background-color: white;">
+
             </div>
         </div>
 
-        <div class="row pt-2" style="height: 100px;">
+        <div class="row mt-4" style="height: 100px;">
             <div class="col d-flex align-items-end justify-content-center p-0">
                 <p>
                     <!--  licensed under CC BY 3.0. -->
@@ -44,5 +51,17 @@
     </div>
 </footer>
 <script>
-    document.getElementById('year').innerHTML = new Date().getFullYear()
+    document.getElementById('year').innerHTML = new Date().getFullYear();
+
+
+    // const slides = document.querySelectorAll('#sponsors-slider img');
+    // const slideWidth = slides[0].offsetWidth;
+
+    // // Clone the slides to create a seamless loop
+    // const sliderWrapper = document.querySelector('#sponsors-slider');
+    // const clonedSlides = [...slides].map((slide) => slide.cloneNode(true));
+    // clonedSlides.forEach((slide) => sliderWrapper.appendChild(slide));
+
+
+
 </script>
