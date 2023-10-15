@@ -366,7 +366,7 @@ div {
 }
 
 #field {
-    background-image: url('/images/grass2.png');
+    background-image: url('../images/grass2.png');
     width: 650px;
     position: relative;
     height: 850px;
