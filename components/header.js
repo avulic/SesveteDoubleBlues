@@ -29,13 +29,11 @@ class Header extends HTMLElement {
                 document.body.appendChild(script);
             });
             //scriptElements.remove();
-        } else {
-
+        }
+        if (scriptElements.length === 1) {
             const script = document.createElement('script');
             script.textContent = scriptElements[0].textContent;
             document.body.appendChild(script);
-
-
         }
     }
 }

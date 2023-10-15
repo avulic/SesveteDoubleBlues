@@ -1,5 +1,3 @@
-
-
 // Function to load and display content
 export async function fetchComponent(fileName) {
     return fetch(fileName)
@@ -77,8 +75,8 @@ function makeElement() {
 }
 
 window.addEventListener('load', function () {
-    setTimeout(removeLoader, 500); // wait for page load PLUS two seconds.
-    makeElement();
+    setTimeout(removeLoader, 200); // wait for page load PLUS two seconds.
+    // makeElement();
 });
 
 function removeLoader() {
@@ -148,117 +146,360 @@ function parallax() {
 
 
 
-function slider() {
-    window.requestAnimFrame = (function () {
-        return (
-            window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1000 / 60);
+
+const ASSET_URL = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/215059/';
+
+let $stage = null;
+let $world = null;
+let $terrain = null;
+let $team = null;
+let $teamListHome = null;
+let $players = null;
+let $playersHome = null; // Subset of $players
+let $playersAway = null; // Subset of $players
+let $switchBtn = null;
+let $loadBtn = null;
+let $closeBtn = null;
+let $heading = null;
+let $subHeading = null;
+let $loading = null;
+let $switcher = null;
+
+const data = {
+    players: {
+        home: [
+            {
+                name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+            }
+            // Add other player data for the home team
+        ],
+        away: [
+            {
+                name: 'Benzema', asset: 'rm-benzema.jpg', origin: 'France', height: '1.87m', shirt: '9', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+            }
+            // Add other player data for the away team
+        ],
+    }
+};
+
+const state = {
+    home: true,
+    disabHover: false,
+    swapSides: function () {
+        if (this.home) this.home = false;
+        else this.home = true;
+    },
+    curSide: function () {
+        return this.home ? 'home' : 'away';
+    },
+};
+
+const pos = {
+    world: {
+        baseX: 0,
+        baseY: 0,
+        baseZ: -200,
+    },
+    def: {
+        goalie: [0, -50],
+    },
+};
+
+const dom = {
+    addPlayers: function (side) {
+        for (const key in data.players[side]) {
+            const val = data.players[side][key];
+            val.side = side;
+            const $el = this.addPlayer(val);
+            $team.append($el);
+        }
+        $players = $('.js-player');
+        $playersHome = $('.js-player[data-side="home"]');
+        $playersAway = $('.js-player[data-side="away"]');
+    },
+    addPlayer: function (data) {
+        const $el = $(`<div class="js-player player" data-name="${data.name}" data-side="${data.side}" data-x="${data.x}" data-y="${data.y}"></div>`);
+        $el.append(`<div class="player__label"><span>${data.name}</span></div>`);
+        $el.append(`<div class="player__img"><img src="${ASSET_URL}${data.asset}"></div>`);
+        $el.prepend('<div class="player__card"> </div>');
+        $el.prepend('<div class="player__placeholder"></div>');
+        this.populateCard($el.find('.player__card'), data);
+        return $el;
+    },
+    preloadImages: function (preload) {
+        const promises = [];
+        let i = 0;
+        while (i < preload.length) {
+            ((url, promise) => {
+                const img = new Image();
+                img.onload = () => promise.resolve();
+                img.src = url;
+            })(preload[i], (promises[i] = $.Deferred()));
+            i++;
+        }
+        $.when.apply($, promises).done(() => {
+            scenes.endLoading();
+            scenes.loadIn(1600);
+        });
+    },
+    populateCard: function ($el, data) {
+        $el.append(
+            `<h3>${data.name}</h3>` +
+            '<ul class="player__card__list"><li><span>DOB</span><br/>' +
+            `${data.dob} yr</li><li><span>Height</span><br/>${data.height}</li>` +
+            `<li><span>Origin</span><br/>${data.origin}</li></ul>` +
+            '<ul class="player__card__list player__card__list--last">' +
+            `<li><span>Games</span><br/>${data.games}</li>` +
+            `<li><span>Goals</span><br/>${data.goals}</li></ul>`
+        );
+    },
+    displayNone: function ($el) {
+        $el.css('display', 'none');
+    },
+};
+
+const events = {
+    attachAll: function () {
+        $switchBtn.on('click', (e) => {
+            e.preventDefault();
+            const $el = $(this);
+            if ($el.hasClass('disabled')) return;
+            scenes.switchSides();
+            $switchBtn.removeClass('disabled');
+            $el.addClass('disabled');
+        });
+
+        $loadBtn.on('click', (e) => {
+            e.preventDefault();
+            scenes.loadIn();
+        });
+
+        $players.on('click', (e) => {
+            e.preventDefault();
+            const $el = $(this);
+            if ($('.active').length) return false;
+            $el.addClass('active');
+            scenes.focusPlayer($el);
+            setTimeout(() => events.attachClose(), 1);
+        });
+    },
+    attachClose: function () {
+        $stage.one('click', (e) => {
+            e.preventDefault();
+            scenes.unfocusPlayer();
+        });
+    },
+};
+
+const scenes = {
+    preLoad: function () {
+        $teamListHome.velocity({ opacity: 0 }, 0);
+        $players.velocity({ opacity: 0 }, 0);
+        $loadBtn.velocity({ opacity: 0 }, 0);
+        $switcher.velocity({ opacity: 0 }, 0);
+        $heading.velocity({ opacity: 0 }, 0);
+        $subHeading.velocity({ opacity: 0 }, 0);
+        $playersAway.css('display', 'none');
+        $world.velocity({ opacity: 0, translateZ: -200, translateY: -60 }, 0);
+        $('main').velocity({ opacity: 1 }, 0);
+    },
+    loadIn: function (delay = 0) {
+        $world.velocity({ opacity: 1, translateY: 0, translateZ: -200 }, { duration: 1000, delay: delay, easing: 'spring' });
+        anim.fadeInDir($heading, 300, delay + 600, 0, 30);
+        anim.fadeInDir($subHeading, 300, delay + 800, 0, 30);
+        anim.fadeInDir($teamListHome, 300, delay + 800, 0, 30);
+        anim.fadeInDir($switcher, 300, delay + 900, 0, 30);
+        delay += 1200;
+        const delayInc = 30;
+        anim.dropPlayers($playersHome, delay, delayInc);
+    },
+    startLoading: function () {
+        anim.fadeInDir($loading, 300, 0, 0, -20);
+        const images = [];
+        for (const key in data.players.home, data.players.away) {
+            images.push(ASSET_URL + val.asset);
+        }
+        dom.preloadImages(images);
+    },
+    endLoading: function () {
+        anim.fadeOutDir($loading, 300, 1000, 0, -20);
+    },
+    arrangePlayers: function () {
+        $players.each(function () {
+            const $el = $(this);
+            $el.velocity({
+                translateX: parseInt($el.attr('data-x')),
+                translateZ: parseInt($el.attr('data-y')), // Z is the Y axis on the field
+            });
+        });
+    },
+    focusPlayer: function ($el) {
+        const data = $el.data();
+        let shiftY = data.y;
+        if (shiftY > 0) shiftY = data.y / 2;
+
+        $(`.js-player[data-side="${state.curSide()}"]`)
+            .not('.active')
+            .each(function () {
+                const $unfocus = $(this);
+                anim.fadeOutDir($unfocus, 300, 0, 0, 0, 0, null, 0.2);
+            });
+
+        $world.velocity(
+            {
+                translateX: pos.world.baseX - data.x,
+                translateY: pos.world.baseY,
+                translateZ: pos.world.baseZ - shiftY, // Z is the Y axis on the field
+            },
+            600
+        );
+
+        $terrain.velocity({ opacity: 0.66 }, 600);
+        this.showPlayerCard($el, 600, 600);
+    },
+    unfocusPlayer: function () {
+        const $el = $('.js-player.active');
+        const data = $el.data();
+        anim.fadeInDir($(`.js-player[data-side="${state.curSide()}"]`).not('.active'), 300, 300, 0, 0, 0, null, 0.2);
+        $el.removeClass('active');
+        $world.velocity(
+            {
+                translateX: pos.world.baseX,
+                translateY: pos.world.baseY,
+                translateZ: pos.world.baseZ, // Z is the Y axis on the field
+            },
+            600
+        );
+
+        $terrain.velocity({ opacity: 1 }, 600);
+        this.hidePlayerCard($el, 600, 600);
+    },
+    hidePlayerCard: function ($el, dur, delay) {
+        const $card = $el.find('.player__card');
+        const $image = $el.find('.player__img');
+        $image.velocity({ translateY: 0 }, 300);
+        anim.fadeInDir($el.find('.player__label'), 200, delay);
+        anim.fadeOutDir($card, 300, 0, 0, -100);
+    },
+    showPlayerCard: function ($el, dur, delay) {
+        const $card = $el.find('.player__card');
+        const $image = $el.find('.player__img');
+        $image.velocity({ translateY: '-=150px' }, 300);
+        anim.fadeOutDir($el.find('.player__label'), 200, delay);
+        anim.fadeInDir($card, 300, 200, 0, 100);
+    },
+    switchSides: function () {
+        let delay = 0;
+        const delayInc = 20;
+        const $old = $playersHome;
+        const $new = $playersAway;
+        if (!state.home) {
+            $old = $playersAway;
+            $new = $playersHome;
+        }
+        state.swapSides();
+        $old.each(function () {
+            const $el = $(this);
+            anim.fadeOutDir($el, 200, delay, 0, -60, 0);
+            anim.fadeOutDir($el.find('.player__label'), 200, delay + 700);
+            delay += delayInc;
+        });
+        $terrain.velocity({ rotateY: '+=180deg' }, { delay: 150, duration: 1200 });
+        anim.dropPlayers($new, 1500, 30);
+    },
+};
+
+const anim = {
+    fadeInDir: function ($el, dur, delay, deltaX = 0, deltaY = 0, deltaZ = 0, easing = null, opacity = 0) {
+        $el.css('display', 'block');
+        $el.velocity(
+            {
+                translateX: `-=${deltaX}`,
+                translateY: `-=${deltaY}`,
+                translateZ: `-=${deltaZ}`,
+            },
+            0
+        );
+
+        $el.velocity(
+            {
+                opacity: 1,
+                translateX: `+=${deltaX}`,
+                translateY: `+=${deltaY}`,
+                translateZ: `+=${deltaZ}`,
+            },
+            {
+                easing: easing,
+                delay: delay,
+                duration: dur,
             }
         );
-    })();
-
-    const wrapSlider = document.querySelector("#js-wrapSlider");
-    const widthWrap = wrapSlider.offsetWidth;
-
-    let items;
-    let sliders;
-    let sliderList = [];
-
-    const getSliderList = () => {
-        sliders = document.querySelectorAll(".js-slider");
-        // get the dom elements in a array to better use it
-        sliderList = [...sliders];
-    };
-    // made a function for update later
-    getSliderList();
-
-    const slider = document.querySelectorAll(".js-slider")[0];
-    const sliderWidth = slider.offsetWidth;
-
-    const sumIsLargerThanSlider = sliderWidth >= widthWrap + sliderWidth;
-
-    const iterationItems = Math.ceil((widthWrap + sliderWidth) / sliderWidth);
-
-    // we clone number of slider we need
-    if (iterationItems > 1) {
-        for (let i = 0; i < iterationItems - 1; i++) {
-            const clone = slider.cloneNode(true);
-            wrapSlider.appendChild(clone);
+    },
+    fadeOutDir: function ($el, dur, delay, deltaX = 0, deltaY = 0, deltaZ = 0, easing = null, opacity = 0) {
+        let display = 'none';
+        if (opacity) {
+            display = 'block';
         }
-
-        getSliderList();
-    }
-
-    // we create an array for knowing the state of each item
-    let stateList = sliderList.map((item, i) => {
-        let pos = 0;
-        let start = false;
-
-        // here we allow the slide to start fully at left
-        if (i < iterationItems - 1) {
-            pos = -widthWrap + sliders[i].offsetWidth * i;
-            start = true;
-
-            sliders[i].style.transform = `translate(${pos}px, -50%)`;
-        }
-
-        return {
-            pos,
-            start
-        };
-    });
-
-    // logic animation for sliding each item at a time
-    const translate = () => {
-        for (let i = 0; i < sliderList.length; i++) {
-            const slider = sliderList[i];
-            const sliderWidth = slider.offsetWidth;
-            const nextIndex = i != sliderList.length - 1 ? i + 1 : 0;
-            let pos;
-
-            // if slider should be in movement
-            if (stateList[i].start) {
-                stateList[i].pos -= 1;
-                pos = stateList[i].pos;
-
-                slider.style.transform = `translate(${pos}px, -50%)`;
+        $el.velocity(
+            {
+                opacity: opacity,
+                translateX: `+=${deltaX}`,
+                translateY: `+=${deltaY}`,
+                translateZ: `+=${deltaZ}`,
+            },
+            {
+                easing: easing,
+                delay: delay,
+                duration: dur,
             }
+        )
+            .velocity(
+                {
+                    opacity: opacity,
+                    translateX: `-=${deltaX}`,
+                    translateY: `-=${deltaY}`,
+                    translateZ: `-=${deltaZ}`,
+                },
+                {
+                    duration: 0,
+                    display: display,
+                }
+            );
+    },
+    dropPlayers: function ($els, delay, delayInc) {
+        $els.each(function () {
+            const $el = $(this);
+            $el.css({
+                display: 'block',
+                opacity: 0,
+            });
+            anim.fadeInDir($el, 800, delay, 0, 50, 0, 'spring');
+            anim.fadeInDir($el.find('.player__label'), 200, delay + 250);
+            delay += delayInc;
+        });
+    },
+};
 
-            const isComplete = pos <= -sliderWidth;
-            const isOutSeen = pos <= -widthWrap - sliderWidth;
+function init() {
+    $stage = $('.js-stage');
+    $world = $('.js-world');
+    $switchBtn = $('.js-switch');
+    $loadBtn = $('.js-load');
+    $heading = $('.js-heading');
+    $switcher = $('.js-switcher');
+    $closeBtn = $('.js-close');
+    $subHeading = $('.js-subheading');
+    $terrain = $('.js-terrain');
+    $team = $('.js-team');
+    $teamListHome = $('.js-team-home');
+    $loading = $('.js-loading');
 
-            // if the slider is fully on screen
-            if (isComplete) {
-                stateList[nextIndex].start = true;
-            }
-            // if the slider finished crossing the slider and has disappeared
-            if (isOutSeen) {
-                stateList[i].start = false;
-                stateList[i].pos = 0;
-            }
-        }
-    };
-
-    let isPaused = false;
-
-    function start() {
-        if (!isPaused) {
-            translate();
-        }
-
-        requestAnimFrame(start);
-    }
-
-    wrapSlider.addEventListener("mouseover", () => {
-        isPaused = true;
-    });
-    wrapSlider.addEventListener("mouseout", () => {
-        isPaused = false;
-    });
-
-    start();
+    dom.addPlayers('home');
+    dom.addPlayers('away');
+    scenes.preLoad();
+    scenes.arrangePlayers();
+    events.attachAll();
+    scenes.startLoading();
 }
 
+$(document).ready(init);

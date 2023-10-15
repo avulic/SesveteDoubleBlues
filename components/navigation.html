@@ -6,7 +6,7 @@
                 <div id="games" onclick="showInlineNavigation()"
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
-                        <a href="#games">
+                        <a href="#1_kolo">
                             <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
                         </a>
                     </div>
@@ -37,7 +37,9 @@
                 <div onclick=""
                     style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        <a href="#players">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        </a>
                     </div>
                     <div>
                         <span style="color: #f0f0f0;">Players</span>
@@ -60,7 +62,7 @@
         class="row justify-content-center custom-rounded-div">
         <div class="col-lg-4">
             <div class="instagram-stories" style=" color: #000000;">
-                <div
+                <div id="kolo_1"
                     style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <a href="#1_kolo">
@@ -69,7 +71,7 @@
                     </div>
                     <span>1. kolo</span>
                 </div>
-                <div
+                <div id="2.kolo"
                     style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <a href="#2_kolo">
@@ -78,7 +80,7 @@
                     </div>
                     <span>2. kolo</span>
                 </div>
-                <div
+                <div id="3.kolo"
                     style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <a href="#3_kolo">
@@ -87,7 +89,7 @@
                     </div>
                     <span>3. kolo</span>
                 </div>
-                <div
+                <div id="4.kolo"
                     style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
                     <div class="story-icon">
                         <a href="#4_kolo">
@@ -102,44 +104,7 @@
 </div>
 
 <script>
-    function stickyScroll() {
-        // Get the element with class 'fixme'
-        var fixme = document.querySelector('.fixme');
 
-        // Get the initial top position of the 'fixme' element
-        var fixmeTop = fixme.getBoundingClientRect().top;
-
-        // Add a scroll event listener to the window
-        window.addEventListener('scroll', function () {
-            // Get the current scroll position
-            var currentScroll = window.scrollY;
-
-            // Check if the current scroll position is greater than or equal to the initial top position of 'fixme'
-            if (currentScroll >= fixmeTop) {
-                // If true, set the position of 'fixme' to 'fixed'
-                fixme.style.position = 'fixed';
-                fixme.style.top = '0';
-                fixme.style.left = '0';
-            } else {
-                // If false, set the position of 'fixme' to 'static'
-                fixme.style.position = 'static';
-            }
-        });
-    }
-
-    function destroyLuxy() {
-        // Cancel animation frames
-        //luxy.cancel();
-
-        // Remove Luxy class from HTML elements
-        //const luxyElements = document.querySelectorAll('.luxy, .luxy-el');
-        // luxyElements.forEach((element) => {
-        //     element.classList.remove('luxy', 'luxy-el');
-        // });
-    }
-
-    // Call this function when you want to destroy Luxy
-    //stickyScroll();
     function showInlineNavigation() {
         $("#navigation-inside").toggle();
     }

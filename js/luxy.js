@@ -144,14 +144,10 @@
 			}
 		},
 		animate: function () {
-
 			this.scroll();
 			this.scrollId = requestAnimationFrame(this.animate.bind(this));
-
-
 		},
 		wrapperUpdate: function () {
-
 			this.wapperOffset += (this.scrollTop - this.wapperOffset) * this.settings.wrapperSpeed;
 			this.wrapper.style.transform = 'translate3d(' + 0 + ',' + Math.round(-this.wapperOffset * 100) / 100 + 'px ,' + 0 + ')';
 		},
@@ -206,6 +202,18 @@
 			this.scrollId = "";
 			this.resizeId = "";
 		},
+		stop: function () {
+			cancelAnimationFrame(self.resizeId);
+			cancelAnimationFrame(self.scrollId);
+		},
+		restart: function () {
+
+			self.isResize = false;
+			self.resizeId = requestAnimationFrame(self.resize.bind(self));
+			self.scrollId = requestAnimationFrame(self.animate.bind(self));
+
+
+		}
 	};
 
 

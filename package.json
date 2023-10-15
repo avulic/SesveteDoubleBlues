@@ -11,5 +11,8 @@
   "dependencies": {
     "locomotive-scroll": "^4.1.4",
     "rellax": "^1.12.1"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.7.0"
   }
 }

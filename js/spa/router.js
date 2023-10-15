@@ -23,24 +23,30 @@ export class Router {
     }
 
     goToRoute(htmlName) {
-        const url = `components/${htmlName}`;
-        fetch(url)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Error fetching ${url}`);
-                }
-                return response.text();
-            })
-            .then((html) => {
-                const newChild = parseElement(html);
-                this.rootElem.innerHTML = html;
-                this.executeScriptTag(newChild);
-            })
-            .catch((error) => {
-                console.error(error);
-                // Handle error, e.g., show an error message to the user.
-            });
+        if (typeof htmlName === 'string') {
+            const url = `components/${htmlName}`;
+            fetch(url)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Error fetching ${url}`);
+                    }
+                    return response.text();
+                })
+                .then((html) => {
+                    const newChild = parseElement(html);
+                    this.rootElem.innerHTML = html;
+                    this.executeScriptTag(newChild);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    // Handle error, e.g., show an error message to the user.
+                });
+        } else {
+            this.rootElem.innerHTML = ""
+            this.rootElem.appendChild(htmlName);
+        }
     }
+
     executeScriptTag(element) {
         // Get the script element in the Shadow DOM.
         const scriptElements = element.getElementsByTagName('script');
@@ -55,7 +61,6 @@ export class Router {
             //scriptElements.remove();
         }
         if (scriptElements.length === 1) {
-            console.log(scriptElements);
             const script = document.createElement('script');
             script.textContent = scriptElements[0].textContent;
             document.body.appendChild(script);

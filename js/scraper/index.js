@@ -58,6 +58,8 @@ async function listFilesInFolder(folderId) {
 
 async function listFilesAndFolders(folder) {
     try {
+        var picturesUrls = []
+
         console.log(`Folder Name: ${folder.name}, Folder ID: ${folder.id}`);
 
         const foldersResponse = await drive.files.list({
@@ -67,37 +69,38 @@ async function listFilesAndFolders(folder) {
 
         const picturesResponse = await drive.files.list({
             q: `'${folder.id}' in parents and mimeType='image/jpeg'`,
-            fields: 'files(name)'
+            fields: 'files(id,name)'
         });
 
         if (foldersResponse.data.files.length) {
             console.error('Folders');
             const folderPromises = foldersResponse.data.files.map(async (folder) => {
                 const pictures = await listFilesAndFolders(folder);
-                pictures.data.files.forEach((Pictures) => {
-                    console.log(`Pictures Name: ${Pictures.name}, Pictures ID: ${Pictures.id}`);
-                });
             });
             await Promise.all(folderPromises);
         } else {
             if (picturesResponse.data.files.length) {
                 console.error('Samo slike');
-                return picturesResponse;
+                picturesResponse.data.files.forEach((Pictures) => {
+                    //console.log(`Pictures Name: ${Pictures.name}, Pictures ID: ${Pictures.id}`);
+                    console.log(constructNewLink(Pictures.id))
+                });
             } else {
                 console.error('Prazno');
             }
         }
+
+        return picturesUrls
     } catch (error) {
         console.error('Error listing files and folders:', error);
     }
 }
 
-const folderId = '1S6RRArWnZUt495EGz1r2N-jTjd4hTZqh';
+const folderId = '1TZvUKGv6BzNJhxm0vb5qw7SRwfNqrb3W';
 const folder = {
     id: folderId,
     name: "2023"
 };
 
-listFilesAndFolders(folder);
 
-
+listFilesAndFolders(folder)
