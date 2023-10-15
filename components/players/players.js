@@ -6,7 +6,7 @@ export class Players extends HTMLElement {
         super();
     }
     connectedCallback() {
-        fetchComponent('./components/players/Players.html').then((content) => {
+        fetchComponent('./components/players/players.html').then((content) => {
             if (content) {
                 this.innerHTML = content;
                 var element = parseElement(content)

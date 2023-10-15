@@ -1,7 +1,7 @@
 'use strict';
 import { Route } from "./route.js";
 import { Router } from "./router.js";
-import { Kolo1 } from '../components/games/1_kolo.js '
+import { Kolo1 } from '../components/games/1_kolo.js'
 import { Players } from '../components/players/players.js'
 
 (function () {
