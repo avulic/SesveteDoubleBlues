@@ -1,99 +1,89 @@
-<div id="navigation" class="container p-2">
-
-    <div style=" background-color: rgb(10 9 10 / 96%);" class="row justify-content-center custom-rounded-div">
+<div id="navigation" class="container p-1">
+    <div style="background-color: rgb(10 9 10 / 96%)" class="row justify-content-center custom-rounded-div">
         <div class="col-lg-8">
-            <div class="instagram-stories">
-                <div id="games" onclick="showInlineNavigation()"
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+            <div onclick="hideInlineNavigation(event)" class="instagram-stories">
+                <div class="navigation-link">
+                    <div class="story-icon">
+                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
+                    </div>
+                    <div>
+                        <span style="color: #f0f0f0">About</span>
+                    </div>
+                </div>
+                <div id="games" onclick="showInlineNavigation()" class="navigation-link">
                     <div class="story-icon">
                         <a href="#1_kolo">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <div>
-                        <span style="color: #f0f0f0;">Games</span>
+                        <span style="color: #f0f0f0">Games</span>
                     </div>
                 </div>
-                <div onclick="hideInlineNavigation()"
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div class="navigation-link">
                     <div class="story-icon">
                         <a href="#shop">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <div>
-                        <span style="color: #f0f0f0;">Shop</span>
+                        <span style="color: #f0f0f0">Promo</span>
                     </div>
                 </div>
-                <div onclick=""
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div class="navigation-link">
                     <div class="story-icon">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                     </div>
                     <div>
-                        <span style="color: #f0f0f0;">Events</span>
+                        <span style="color: #f0f0f0">Events</span>
                     </div>
                 </div>
-                <div onclick=""
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div class="navigation-link">
                     <div class="story-icon">
                         <a href="#players">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <div>
-                        <span style="color: #f0f0f0;">Players</span>
-                    </div>
-                </div>
-                <div onclick=""
-                    style="z-index: 9; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
-                    <div class="story-icon">
-                        <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
-                    </div>
-                    <div>
-                        <span style="color: #f0f0f0;">About</span>
+                        <span style="color: #f0f0f0">Players</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="navigation-inside" style=" background-color: rgba(243, 243, 243, 0.96); display: none;"
+    <div id="navigation-inside" style="background-color: rgba(243, 243, 243, 0.96); display: none"
         class="row justify-content-center custom-rounded-div">
         <div class="col-lg-4">
-            <div class="instagram-stories" style=" color: #000000;">
-                <div id="kolo_1"
-                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
-                    <div class="story-icon">
+            <div class="instagram-stories" style="color: #000000">
+                <div id="kolo_1" class="navigation-link">
+                    <div class=" story-icon">
                         <a href="#1_kolo">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <span>1. kolo</span>
                 </div>
-                <div id="2.kolo"
-                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div id="2.kolo" class="navigation-link">
                     <div class="story-icon">
                         <a href="#2_kolo">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <span>2. kolo</span>
                 </div>
-                <div id="3.kolo"
-                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div id="3.kolo" class="navigation-link">
                     <div class="story-icon">
                         <a href="#3_kolo">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <span>3. kolo</span>
                 </div>
-                <div id="4.kolo"
-                    style="display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer;">
+                <div id="4.kolo" class="navigation-link">
                     <div class="story-icon">
                         <a href="#4_kolo">
-                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96">
+                            <img src="./images/story_icon.png" alt="Story Icon" width="96" height="96" />
                         </a>
                     </div>
                     <span>4. kolo</span>
@@ -106,10 +96,12 @@
 <script>
 
     function showInlineNavigation() {
-        $("#navigation-inside").toggle();
+        $("#navigation-inside").show();
     }
-    function hideInlineNavigation() {
-        setTimeout(() => { $("#navigation-inside").hide() }, 100)
-
+    function hideInlineNavigation(event) {
+        target = event.target.parentElement;
+        if (target.parentElement.parentElement.id !== "games") {
+            setTimeout(() => { $("#navigation-inside").hide() }, 100)
+        }
     }
 </script>

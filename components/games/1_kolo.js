@@ -1,4 +1,4 @@
-import { fetchComponent, parseElement } from "../../js/index.js";
+import { fetchComponent, parseElement, parseTemplateElement } from "../../js/index.js";
 
 
 export class Kolo1 extends HTMLElement {
@@ -6,32 +6,15 @@ export class Kolo1 extends HTMLElement {
         super();
     }
     connectedCallback() {
-        fetchComponent('./components/games/1_kolo.html').then((content) => {
-            if (content) {
-                this.innerHTML = content;
-                var element = parseElement(content)
-                this.executeScriptTag(element);
-            }
-        });
-    }
-
-    executeScriptTag(element) {
-        // Get the script element in the Shadow DOM.
-        const scriptElements = element.getElementsByTagName('script');
-
-        // Check if a script element exists.
-        if (scriptElements.length > 1) {
-            scriptElements.forEach((scriptElement) => {
-                const script = document.createElement('script');
-                script.textContent = scriptElement.textContent;
-                document.body.appendChild(script);
+        if (!this.shadowRoot) {
+            fetchComponent('./components/games/1_kolo.html').then((content) => {
+                const shadow = this.attachShadow({ mode: "open" });
+                if (content) {
+                    this.innerHTML = '';
+                    var template = parseTemplateElement(content)
+                    shadow.appendChild(template.content);
+                }
             });
-            //scriptElements.remove();
-        }
-        if (scriptElements.length === 1) {
-            const script = document.createElement('script');
-            script.textContent = scriptElements[0].textContent;
-            document.body.appendChild(script);
         }
     }
 }

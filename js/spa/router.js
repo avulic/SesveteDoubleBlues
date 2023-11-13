@@ -39,7 +39,6 @@ export class Router {
                 })
                 .catch((error) => {
                     console.error(error);
-                    // Handle error, e.g., show an error message to the user.
                 });
         } else {
             this.rootElem.innerHTML = ""

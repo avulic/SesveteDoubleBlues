@@ -10,13 +10,42 @@
         </div>
     </div>
 </section>
+
+
+<!-- loader -->
+<div id="loadingDiv">
+    <div class="loader">Loading...</div>
+</div>
+
 <script>
 
     luxy.init()
 
-    var fixme = document.querySelector('#main');
-    var fixmeTop = fixme.getBoundingClientRect().top;
-    var oldLuxy;
+    // var fixme = document.querySelector('#main');
+    // var fixmeTop = fixme.getBoundingClientRect().top;
+    // var oldLuxy;
 
+    function onImageLoaded(url, callback) {
+        const img = new Image();
+        img.src = url;
+        img.onloadend = callback;   //Image has loaded or failed
+        return;
+    }
+
+    $(window).on("load", function () {
+        removeLoader()
+    });
+
+    function removeLoader() {
+        const loadingDiv = document.getElementById("loadingDiv");
+
+        if (loadingDiv) {
+            loadingDiv.style.transition = "opacity 0.5s";
+            loadingDiv.style.opacity = "0";
+            setTimeout(() => {
+                loadingDiv.remove(); // Remove the loading div after the fade out
+            }, 800);
+        }
+    }
 
 </script>

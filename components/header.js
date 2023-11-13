@@ -36,5 +36,4 @@ class Header extends HTMLElement {
             document.body.appendChild(script);
         }
     }
-}
-customElements.define('header-component', Header);
+}customElements.define('header-component', Header);

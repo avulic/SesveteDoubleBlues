@@ -31,9 +31,9 @@
     }
 
     .story-icon {
-      width: 50px;
+      width: 30px;
       /* Adjust the width of the story icons */
-      height: 50px;
+      /*height: 50px;*/
       /* Adjust the height of the story icons */
       border-radius: 50%;
       /* overflow: hidden; */
@@ -53,7 +53,7 @@
     .custom-rounded-div {
       /* Add your custom styles here */
       background-color: #f0f0f0;
-      padding: 20px;
+      padding: 5px;
       border-radius: 15px;
       /* Adjust the border-radius for the desired level of roundness */
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -129,6 +129,7 @@
     <header>
       <header-component></header-component>
     </header>
+
     <main id="main">
       <section id="instagram-section">
         <navigation-component></navigation-component>
@@ -140,20 +141,34 @@
     </main>
 
     <footer-component></footer-component>
-
-
-    <!-- loader -->
-    <div id="loadingDiv">
-      <div class="loader">Loading...</div>
-    </div>
-
   </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="./js/luxy.js" charset="utf-8" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="./js/luxy.js" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./js/anime.min.js"></script>
 
+
+  <script defer>
+    window.onload = function () {
+      $('html, body').animate({ scrollTop: 0 }, 'fast');
+    };
+
+    // $('html, body').animate({ scrollTop: 0 }, 'fast');
+    // console.log("1")
+    // $(window).ready(function () {
+    //   $('html, body').animate({ scrollTop: 0 }, 'fast');
+    //   console.log("2")
+    // });
+
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   $('html, body').animate({ scrollTop: 0 }, 'fast');
+    //   console.log("5")
+    // });
+  </script>
 
   <script src=" ./components/header.js" type="module" defer></script>
   <script src="./components/navigation.js" type="module" defer></script>
@@ -161,12 +176,6 @@
 
   <script src="./js/index.js" type="module" defer></script>
   <script src="./js/spa/app.js" type="module" defer></script>
-
-  <script>
-
-  </script>
-
-
 </body>
 
 </html>
