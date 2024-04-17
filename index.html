@@ -121,18 +121,21 @@
       font-weight: 400
     }
   </style>
+
+
+
+
 </head>
 
 <body>
 
-  <div id="luxy">
+  <div id="">
     <header>
-      <header-component></header-component>
+      <navigation-component></navigation-component>
     </header>
 
     <main id="main">
-      <section id="instagram-section">
-        <navigation-component></navigation-component>
+      <section id="instagram-section" class="container p-1">
 
         <div id="app">
         </div>
@@ -140,13 +143,13 @@
       </section>
     </main>
 
-    <footer-component></footer-component>
+
   </div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="./js/luxy.js" charset="utf-8"></script>
+  <!---<script src="./js/luxy.js" charset="utf-8"></script>---->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="./js/anime.min.js"></script>
 
@@ -154,25 +157,14 @@
   <script defer>
     window.onload = function () {
       $('html, body').animate({ scrollTop: 0 }, 'fast');
+
     };
-
-    // $('html, body').animate({ scrollTop: 0 }, 'fast');
-    // console.log("1")
-    // $(window).ready(function () {
-    //   $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //   console.log("2")
-    // });
-
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //   $('html, body').animate({ scrollTop: 0 }, 'fast');
-    //   console.log("5")
-    // });
   </script>
 
   <script src=" ./components/header.js" type="module" defer></script>
   <script src="./components/navigation.js" type="module" defer></script>
   <script src="./components/footer.js" type="module" defer></script>
+  <script src="./components/about.js" type="module" defer></script>
 
   <script src="./js/index.js" type="module" defer></script>
   <script src="./js/spa/app.js" type="module" defer></script>

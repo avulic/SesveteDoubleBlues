@@ -4,11 +4,12 @@ import { fetchComponent, parseElement, parseTemplateElement } from "../../js/ind
 export class About extends HTMLElement {
     constructor() {
         super();
+
     }
     connectedCallback() {
         // Check if the shadow DOM has already been attached
         if (!this.shadowRoot) {
-            fetchComponent('./components/players/about.html').then((content) => {
+            fetchComponent('./components/about.html').then((content) => {
                 const shadow = this.attachShadow({ mode: "open" });
                 if (content) {
                     this.innerHTML = '';
@@ -37,5 +38,8 @@ export class About extends HTMLElement {
         }
     }
 }
+
+
+
 
 customElements.define('about-component', About);

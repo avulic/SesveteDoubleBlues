@@ -21,6 +21,7 @@ body {
     background: #181e21;
     color: #fdfdfd;
     min-height: fit-content;
+    padding: 10px;
 }
 
 
@@ -860,3 +861,224 @@ a.circle {
 .FB {
     width: 200px;
 } */
+
+/*
+
+
+.bento-box {
+    display: grid;
+
+    grid-auto-rows: minmax(50px, auto);
+    gap: 20px;
+    grid-template-areas:
+        "box4 box2 box2 box3 box1 box1"
+        "box4 box2 box2 box6 box1 box1"
+        "box4 box7 box7 box6 box1 box1"
+        "box4 box7 box7 box6 box1 box1"
+        "box8 box8 box8 box8 box12 box12";
+}
+*/
+
+
+
+
+
+
+/* Example styles for different boxes 
+.box1 {
+    grid-area: box1;
+}
+
+.box2 {
+    grid-area: box2;
+}
+
+.box3 {
+    grid-area: box3;
+}
+
+.box4 {
+    grid-area: box4;
+}
+
+.box5 {
+    grid-area: box5;
+}
+
+.box6 {
+    grid-area: box6;
+}
+
+.box7 {
+    grid-area: box7;
+}
+
+.box8 {
+    grid-area: box8;
+}
+
+.box9 {
+    grid-area: box9;
+}
+
+.box12 {
+    grid-area: box12;
+    grid-column: 3 / 3;
+
+}
+
+*/
+
+
+h2,
+p {
+    color: #000 !important;
+}
+
+/* style.css */
+.bento-box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    ;
+    gap: 6px;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+@media only screen and (max-width: 676px) {
+    .bento-box {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+}
+
+
+.box {
+    background: #f8f8f8;
+    padding: 16px;
+    border-radius: 13px;
+
+}
+
+.box3 {
+    grid-row: span 2;
+}
+
+.box7 {
+    grid-column: span 3;
+    grid-row: span 2;
+}
+
+.box-container {
+    grid-column: span 4;
+}
+
+@media only screen and (max-width: 676px) {
+    .box-container {
+        grid-column: span 3;
+
+
+    }
+}
+
+.box-small {
+    flex: 1;
+    margin: 0 5px;
+    /* ... other styles ... */
+}
+
+.box-large {
+    grid-column: span 3;
+
+    margin-top: 5px;
+}
+
+@media only screen and (max-width: 676px) {
+    .box-large {
+        grid-column: span 2;
+        margin-top: 5px;
+    }
+}
+
+.box-multi {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.sub-row {
+    display: contents;
+}
+
+.sub-box {
+    background: #e0e0e0;
+    padding: 22px;
+    border-radius: 7px;
+}
+
+
+/* animation*/
+
+.shake {
+    animation: shake 0.5s infinite alternate;
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg);
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: rotate(5deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+        transform: translateY(50%);
+    }
+
+    75% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+        transform: translateY(100%);
+    }
+}
+
+.fall {
+    animation: fall 2s ease-in-out;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(250%);
+    }
+}
+
+.rotate-fall {
+    animation-name: rotate-fall;
+    animation-duration: 1.5s;
+}
+
+@keyframes rotate-fall {
+    from {
+        transform: rotate(0) translateY(0);
+    }
+
+    to {
+        transform: rotate(90deg) translateY(250%);
+    }
+}
+
+.shake-fall {
+    animation: shake 0.5s infinite alternate, fall 0.5s infinite linear;
+}
