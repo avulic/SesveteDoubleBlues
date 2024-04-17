@@ -40,11 +40,6 @@ export class Players extends HTMLElement {
 }
 
 
-function updateStyle() {
-    // Apply external styles to the shadow dom
-    const linkElem = document.createElement("link");
-    linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "styles.css");
-}
+
 
 customElements.define('players-component', Players);

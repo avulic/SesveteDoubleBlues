@@ -9,7 +9,7 @@ export class About extends HTMLElement {
     connectedCallback() {
         // Check if the shadow DOM has already been attached
         if (!this.shadowRoot) {
-            fetchComponent('./components/about.html').then((content) => {
+            fetchComponent('./components/about/about.html').then((content) => {
                 const shadow = this.attachShadow({ mode: "open" });
                 if (content) {
                     this.innerHTML = '';
