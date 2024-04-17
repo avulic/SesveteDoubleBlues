@@ -1,5 +1,5 @@
-# vanilla-spa
+Australian Football Club
 
-A simple implementation of a SPA with plain Js.
+Sesvete Double Blues web page
 
-[Js: Vanilla script SPA]()
+[Web page](https://avulic.github.io/SesveteDoubleBlues/)
