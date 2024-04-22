@@ -390,52 +390,33 @@ div {
 
 
 #field-container {
-    perspective-origin: 50% -269px;
-    perspective: 901px;
-    width: 656px;
+    perspective-origin: 50% -335px;
+    perspective: 953px;
+    width: 675px;
+    /* position: relative; */
 }
 
 @media only screen and (max-width: 769px) {
     #field-container {
-        perspective-origin: 50% -160px;
-        perspective: 835px;
-        width: 96%;
+        perspective-origin: 50% -321px;
+        perspective: 1012px;
+        width: 100%;
     }
 }
 
-@media only screen and (max-width: 426px) {
-    #field-container {
-        width: 98%;
-    }
-}
 
 #field {
-    position: relative;
-    height: 718px;
+    /* position: relative; */
+    height: 739px;
     margin: 0 auto;
+    transform-style: preserve-3d;
     top: -71px;
     backface-visibility: hidden;
+    transform: rotateY(100deg) rotateX(90deg) rotateZ(100deg);
+    border-radius: 64%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-
-.field {
-    transform-style: preserve-3d;
-    transform: rotateY(100deg) rotateX(90deg) rotateZ(100deg);
-}
-
-
-@media only screen and (max-width: 426px) {
-    #field {
-        height: 723px;
-    }
-
-    .field-hidden {
-        transform: none;
-        transform-style: unset;
-    }
-}
-
 
 .field-texture {
     border: 3px solid rgba(255, 255, 255, 0.5);
@@ -448,11 +429,6 @@ div {
     transform-style: preserve-3d;
     pointer-events: none;
 }
-
-.field-texture-hidden {
-    opacity: 0.4;
-}
-
 
 #sides {
     width: 90%;
@@ -719,12 +695,17 @@ div {
 
 .player-container {
     transform-style: preserve-3d;
+    /* width: 100%; */
+    /* height: 100%; */
+    position: absolute;
+    /* border: red solid 2px; */
+    /* bottom: 357px; */
     left: 48%;
     top: 41%;
 }
 
 .player {
-    position: absolute;
+    /* position: relative; */
     z-index: 9;
     bottom: -330px;
     transform-style: preserve-3d;
@@ -733,11 +714,6 @@ div {
     cursor: pointer;
     will-change: transform;
 }
-
-.player-hidden {
-    opacity: 0.3;
-}
-
 
 .player img {
     width: 100%;
@@ -782,53 +758,31 @@ a.circle {
 }
 
 #player-description-container {
-    top: 0px;
-    left: 0px;
+    top: -236px;
+    left: -214%;
+    /* transform: translateY(9%) translateZ(119px) translateX(179px) rotateX(274deg); */
     position: absolute;
     transform-style: preserve-3d;
     height: fit-content;
     z-index: 9;
     bottom: 128px;
-    visibility: hidden;
-    transform: translateY(310px) translateZ(143px) translateX(228px) rotateX(270deg);
-}
-
-
-@media only screen and (max-width: 426px) {
-    #player-description-container {
-        top: 100px;
-        bottom: 0;
-        position: absolute;
-        width: 100% !important;
-        height: 100% !important;
-        visibility: hidden;
-        transform: none;
-    }
-
-    #player-description-container>div {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
+    isplay: none !important;
 }
 
 #player-card-container {
     transform-style: preserve-3d;
     width: 200px !important;
     height: 250px !important;
-}
 
-@media only screen and (max-width: 320px) {}
-
-@media only screen and (max-width: 425px) {
-    /* #canvasContainer {
-        transform: translateX(-5px) translateY(-98px) translateZ(40px) rotateX(89deg);
-    } */
+    display: none;
 }
 
 #fut-card-container {
+    /*width: 300px;*/
+    /* height: 300px; */
     position: absolute;
     transform-style: preserve-3d;
+    /* transform: rotateX(94deg); */
 }
 
 #fut-card {
@@ -840,32 +794,37 @@ a.circle {
 
 #fut-card img {
     position: absolute;
+
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-}
-
-@media only screen and (max-width: 425px) {
-    #fut-card {
-        transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
-    }
-
-    #fut-card-player {
-        left: -35px;
-    }
 }
 
 #fut-card-player {
     transform-style: preserve-3d;
     position: absolute;
-    top: -7px;
+    width: fit-content;
+    height: fit-content;
+    /* width: 495px; */
+    top: 0px;
+    /* left: -24px; */
+    /* -webkit-filter: drop-shadow(5px 5px 5px #222); */
+    /* filter: drop-shadow(17px 0px 6px #222); */
+    /* transform: rotateX(0deg) rotateY(6deg) translateZ(11px); */
+    /* transform: rotateX(-6deg) rotateY(3deg) translateZ(5px); */
     width: 200px;
     height: 250px;
+    /* width: 300px; */
+    /* height: 350px;*/
 }
 
 #fut-card-player img {
     position: absolute;
     filter: drop-shadow(17px 0px 6px #222);
     -webkit-filter: drop-shadow(9px 5px 5px #222);
+    /* width: 250px; */
+    /* height: 300px; */
+    /* top: 63px; */
+    /* left: 50px; */
     width: 300px;
     height: 350px;
     -webkit-backface-visibility: hidden;

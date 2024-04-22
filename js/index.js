@@ -32,7 +32,3 @@ export function parseTemplateElement(content) {
         return template;
     }
 }
-
-
-
-

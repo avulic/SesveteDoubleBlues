@@ -4,10 +4,8 @@ import { fetchComponent, parseElement, parseTemplateElement } from "../../js/ind
 export class About extends HTMLElement {
     constructor() {
         super();
-
     }
     connectedCallback() {
-        // Check if the shadow DOM has already been attached
         if (!this.shadowRoot) {
             fetchComponent('./components/about/about.html').then((content) => {
                 const shadow = this.attachShadow({ mode: "open" });

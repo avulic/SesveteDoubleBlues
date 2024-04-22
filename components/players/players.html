@@ -12,7 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <div id="field-container" class="container-fluid">
-        <div id="field">
+        <div id="field" class="field">
             <div id="team">
             </div>
             <div id="field-texture-container">
@@ -146,8 +146,6 @@
     </div>
 
     <script>
-
-
         ASSET_URL = './images/players/profil/';
         FUT_CARD_ASSET_URL = './images/players/fut/';
         PLAYER_ASSET_URL = './images/players/crop/';
@@ -198,7 +196,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -45, y: -210, z: 42
+                        position: { x: [-31, -34], y: -210, z: 42, left: 50 }
                     },
                     {
                         name: 'Dinko',
@@ -210,7 +208,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -207, y: -117, z: 42
+                        position: { x: [-21, -27], y: -111, z: 42, left: 26 }
                     },
                     {
                         name: 'Neno',
@@ -222,7 +220,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: 107, y: -108, z: 42
+                        position: { x: [-22, -34], y: -111, z: 40, left: 72 }
                     },
                     {
                         name: 'Mole',
@@ -234,7 +232,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: 29, y: 145, z: 42
+                        position: { x: [-21, -27], y: 51, z: 42, left: 63 }
                     },
                     {
                         name: 'Vele',
@@ -246,7 +244,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -44, y: 43, z: 42
+                        position: { x: [-21, -27], y: 128, z: 42, left: 49 }
                     },
                     {
                         name: 'Piksi',
@@ -258,7 +256,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -130, y: 146, z: 42
+                        position: { x: [-21, -27], y: 51, z: 42, left: 36 }
                     },
                     {
                         name: 'Kolja',
@@ -270,7 +268,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: 111, y: 279, z: 42
+                        position: { x: [-21, -27], y: 267, z: 42, left: 70 }
                     },
                     {
                         name: 'Zgela',
@@ -282,7 +280,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -205, y: 265, z: 42
+                        position: { x: [-21, -27], y: 265, z: 42, left: 29 }
                     },
                     {
                         name: 'Mac',
@@ -294,7 +292,7 @@
                         dob: '36',
                         goals: 1,
                         games: 16,
-                        x: -32, y: 411, z: 111
+                        position: { x: [-31, -34], y: 337, z: 42, left: 50 }
                     },
 
                 ],
@@ -344,7 +342,6 @@
         };
 
         dom = {
-
             preloadImages: function (preload) {
                 const promises = [];
                 let i = 0;
@@ -594,27 +591,36 @@
 
 
         function arrangePlayers() {
-            const players = root.find('.player').get();
-            players.forEach(function (player) {
+            const playersContainers = root.find('.player-container').get();
+            playersContainers.forEach(function (container) {
+                var player = container.childNodes[0]
                 anime({
                     targets: player.childNodes[0],
                     opacity: 1,
                     duration: 50,
                 });
 
+                const [[x1, x2], y, z, left] = [
+                    player.attributes['data-x'].value.split(','),
+                    player.attributes['data-y'].value,
+                    player.attributes['data-z'].value,
+                    player.attributes['data-left'].value
+                ]
+
                 anime({
                     targets: player,
-                    translateX: parseInt(player.attributes['data-x'].value),
-                    translateY: parseInt(player.attributes['data-y'].value),
-                    translateZ: parseInt(player.attributes['data-z'].value),
+                    translateX: (x1, x2),
+                    translateY: y,
+                    translateZ: z,
                     rotateX: -90,
                     duration: 4000,
-                    delay: 50
+                    delay: 1000
                 });
 
-                root.find('.player.FF .circle').width(55);
-                var element = root.find('.player.FF')[0];
-                var width = element.offsetWidth;
+                $(player).css('left', left + '%');
+                //root.find('.player.FF .circle').width(55);
+                //var element = root.find('.player.FF')[0];
+                //var width = element.offsetWidth;
             });
             state.playersArranged = true;
         }
@@ -625,7 +631,7 @@
                 playerData.side = side;
                 const $container = $(`<div class="player-container"></div>`);
 
-                $team.append(addPlayer(playerData, $container));
+                $team.append(makePlayer(playerData, $container));
                 $team.append(addPlayerDescription(playerData, $container));
             }
             addCanvas();
@@ -634,8 +640,8 @@
             $playersAway = $('.player[data-side="away"]');
         }
 
-        function addPlayer(data, container) {
-            const $player = $(`<div class="player ${data.pos}" data-x="${data.x}" data-y="${data.y}" data-z="${data.z}"></div>`);
+        function makePlayer(data, container) {
+            const $player = $(`<div class="player ${data.pos}" data-x="${data.position.x}" data-y="${data.position.y}" data-z="${data.position.z}" data-left="${data.position.left}"></div>`);
             const $el = $(`<div class="circle"></div>`);
             $el.append(`<img src="${ASSET_URL}${data.asset}.jpg" height="60" width="60">`);
             $player.append($el);
@@ -688,45 +694,35 @@
             });
         }
 
-        function showCard(card) {
+        function animateCard(card) {
             var card_img = $(card).children()[0]
             var card_player_img = $(card).children()[1]
 
-            anime({
-                targets: card_img,
-                translateX: 5,
-                translateY: 153,
-                translateZ: 140,
-                opacity: 1,
-                duration: 1000,
-                easing: 'linear',
-            });
+            // anime({
+            //     targets: card,
+            //     rotateX: 15,
+            //     rotateY: 18,
+            //     duration: 1000,
+            //     easing: 'linear'
+            // });
 
-            anime({
-                targets: $(card_img).children()[0],
-                rotateX: -90,
-                rotateY: 9,
-                duration: 1000,
-                easing: 'linear'
-            });
+            // anime({
+            //     targets: card_player_img,
+            //     translateX: -75,
+            //     translateY: 43,
+            //     translateZ: 119,
+            //     opacity: 1,
+            //     duration: 1000,
+            //     easing: 'linear',
+            // });
 
-            anime({
-                targets: card_player_img,
-                translateX: -75,
-                translateY: 43,
-                translateZ: 119,
-                opacity: 1,
-                duration: 1000,
-                easing: 'linear',
-            });
-
-            anime({
-                targets: $(card_player_img).children()[0],
-                rotateX: -90,
-                rotateY: 9,
-                duration: 1000,
-                easing: 'linear'
-            });
+            // anime({
+            //     targets: $(card_player_img).children()[0],
+            //     rotateX: -90,
+            //     rotateY: 9,
+            //     duration: 1000,
+            //     easing: 'linear'
+            // });
 
         }
 
@@ -735,22 +731,42 @@
             futPlayerContainer = $(description).find("#player-card-container");
             playerChartContainer = $(description).find("#canvasContainer");
 
-            $(description).attr('style', 'display: block !important');
-            $(futPlayerContainer).show()
+            description.attr('id', 'player-description-container');
+            description.css('visibility', 'visible');
 
-            showCard(futCardContainer);
+            $(futPlayerContainer).show();
+
+            animateCard(futPlayerContainer);
             showGraph(playerChartContainer);
+        }
+
+        function hideField(fieldTexture, field) {
+            fieldTexture.addClass('field-texture-hidden');
+            field.addClass('field-hidden');
+        }
+
+        function showField(fieldTexture) {
+            fieldTexture.removeClass('field-texture-hidden');
+            field.removeClass('field-hidden');
+        }
+
+        function hidePlayers(team) {
+            team.addClass('player-hidden');
+        }
+
+        function showPlayers(team) {
+            team.removeClass('player-hidden');
         }
 
         function addPlayerDescription(playerData, container) {
             var playerDescriptionContainer = $("<div>", {
                 id: "player-description-container",
-                class: "d-flex flex-column custom-hide",
+                class: "d-flex flex-column",
             }).appendTo(container);
 
             var flexRow = $("<div>", {
                 class: "d-flex flex-row justify-content-center",
-                style: "height: 250px;transform-style: preserve-3d",
+                style: "transform-style: preserve-3d",
             }).appendTo(playerDescriptionContainer);
 
             var playerCardContainer = $("<div>", {
@@ -776,12 +792,12 @@
                 style: "transform-style: preserve-3d;font-size: small; "
             }).appendTo(playerDescriptionContainer);
 
-            var paragraph = $("<p>").text("Your description goes here.").appendTo(playerDescription);
-
+            //var paragraph = $("<p>").text("Your description goes here.").appendTo(playerDescription);
+            playerDescription = null;
             return container;
         }
 
-        let myChart;
+        var myChart;
 
         function showGraph(cartContainer) {
             values = [2, 7, 10, 5, 8, 3, 2];
@@ -870,7 +886,7 @@
         }
 
         function hideDescription(description) {
-            $(description).attr('style', 'display: none !important');
+            $(description).css('visibility', 'hidden');
         }
 
         function addCanvas(canvasContainer) {
@@ -891,49 +907,37 @@
         }
 
 
-        root.find("#field-container").hover(function () {
+
+        root.find("#field-container").ready(function () {
             if (!state.playersArranged) {
                 arrangePlayers();
             }
-        });
+        })
 
         root.find("#field-container").click(function (event) {
-            var playerClicked = event.target.closest('.player-container')
+            field = root.find("#field");
+            team = root.find('#team .player');
+            fieldTexture = $(root.find("#field-texture-container")).children();
 
-            team = root.find('#team .player .circle');
-            fieldPoles = $(root.find("#field-texture-container #poles-home, #field-texture-container #poles-away")).children();
-            field = $(root.find("#field-texture-container")).children(":not(#poles-home):not(#poles-away)");
+            var clickedPlayer = event.target.closest('.player-container');
 
-            if (!playerClicked) {
-                resetParameters(playerDescription);
+            if (playerDescription && $(playerDescription).css('visibility') === 'visible') {
                 hideDescription(playerDescription);
-                fadeIn(fieldPoles.get());
-                fadeIn(field.get());
-                fadeIn(team.get());
-            } else {
-                if (playerDescription) {
-                    resetParameters(playerDescription);
-                    hideDescription(playerDescription);
-                }
-                playerDescription = $(playerClicked).find("#player-description-container");
+                resetParameters(playerDescription);
+                showField(fieldTexture, field);
+                showPlayers(team);
+            } else if (clickedPlayer) {
+                playerDescription = $(clickedPlayer).find("#player-description-container");
+
                 futCardContainer = $(playerDescription).find("#fut-card-container");
-
-                if (field.css("opacity") == 1) {
-                    fadeOut(fieldPoles.get());
-                    fadeOut(field.get());
-                    fadeOut(team.get());
-                }
-
+                hideField(fieldTexture, field);
+                hidePlayers(team);
                 showDescription(playerDescription);
             }
         });
 
-        $(window).on("load", function () {
 
-            console.log("dad");
-        });
         addPlayers('home');
-
 
     </script>
 </template>

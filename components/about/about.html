@@ -20,7 +20,7 @@
             <p>This is the content of box 2.</p>
         </div>
         <div class="box box3">
-            <h2>About</h2>
+            <h2>Liga</h2>
             <p>This is the content of box 3.</p>
         </div>
         <div class="box box4">
@@ -32,24 +32,18 @@
             <p>This is the content of box 6.</p>
         </div>
         <div class="box box7">
-            <h2>Promo</h2>
+            <h2>Players</h2>
             <p>This is the content of box 6.</p>
         </div>
 
-
-
-        <!-- ... other boxes ... -->
         <div class="box-container">
-
             <div class="box-multi box20">
-                <!-- Sub-grid with 3x3 layout -->
-                <div class="sub-box">F</div>
-                <div class="sub-box">Y</div>
-                <div class="sub-box">T</div>
-                <div class="sub-box">S</div>
-                <div class="sub-box">M</div>
-                <div class="sub-box">A</div>
-
+                <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues"></a></div>
+                <div class="sub-box"><a href="https://www.youtube.com/channel/UC5YtdLORMv56silqOop3qGA"></a></div>
+                <div class="sub-box"><a href="https://www.instagram.com/sesvetedoubleblues/"></a></div>
+                <div class="sub-box"><a href="https://www.afl.com.au/"></a></div>
+                <div class="sub-box"><a href="https://sanh.hr/en/"></a></div>
+                <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues"></a></div>
             </div>
             <div class="box box-large box19">
                 <h2>sponsors</h2>
@@ -65,22 +59,21 @@
             var self = $(this);
             self.addClass("shake");
 
-            root.find(".box").get().forEach(function (elem) {
-                if (elem != self[0]) {
-                    $(elem).addClass("shake");
 
-                    setTimeout(function () {
-                        $(elem).removeClass("shake");
-                    }, 3000);
-                }
-            })
+            // root.find(".box").get().forEach(function (elem) {
+            //     if (elem != self[0]) {
+            //         $(elem).addClass("shake");
+
+            //         setTimeout(function () {
+            //             $(elem).removeClass("shake");
+            //         }, 3000);
+            //     }
+            // })
 
             setTimeout(function () {
                 self.removeClass("shake");
             }, 3000);
         });
-
-        console.log("dacxycxcd")
     </script>
 
 </template>
