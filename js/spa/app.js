@@ -4,6 +4,7 @@ import { Router } from "./router.js";
 import { Kolo1 } from '../../components/games/1_kolo.js'
 import { Players } from '../../components/players/player.js'
 import { About } from '../../components/about/about.js'
+import { Stadion } from '../../components/stadion/stadion.js'
 
 (function () {
     function init() {
@@ -15,7 +16,8 @@ import { About } from '../../components/about/about.js'
             new Route('5_kolo', 'games/1_kolo.html'),
             new Route('shop', 'shop.html'),
             new Route('about', new About(), true),
-            new Route('players', new Players())
+            new Route('players', new Players()),
+            new Route('stadion', new Stadion())
         ]);
     }
     init();

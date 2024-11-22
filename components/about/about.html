@@ -10,44 +10,71 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-    <section class="bento-box" id="bento-box">
-        <div class="box box1">
-            <h2>Playes</h2>
-            <p>This is the content of box 1.</p>
-        </div>
-        <div class="box box2">
-            <h2>Live</h2>
-            <p>This is the content of box 2.</p>
-        </div>
-        <div class="box box3">
-            <h2>Liga</h2>
-            <p>This is the content of box 3.</p>
-        </div>
-        <div class="box box4">
-            <h2>Liga</h2>
-            <p>This is the content of box 4.</p>
-        </div>
-        <div class="box box6">
-            <h2>Slike</h2>
-            <p>This is the content of box 6.</p>
-        </div>
-        <div class="box box7">
-            <h2>Players</h2>
-            <p>This is the content of box 6.</p>
-        </div>
+    <script src="./components/slider/slider.js" type="module" defer></script>
 
-        <div class="box-container">
-            <div class="box-multi box20">
-                <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues"></a></div>
-                <div class="sub-box"><a href="https://www.youtube.com/channel/UC5YtdLORMv56silqOop3qGA"></a></div>
-                <div class="sub-box"><a href="https://www.instagram.com/sesvetedoubleblues/"></a></div>
-                <div class="sub-box"><a href="https://www.afl.com.au/"></a></div>
-                <div class="sub-box"><a href="https://sanh.hr/en/"></a></div>
-                <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues"></a></div>
-            </div>
-            <div class="box box-large box19">
-                <h2>sponsors</h2>
-                <p>This is the content of the large box spanning 3 columns.</p>
+    <section class="container">
+        <div class="row" style="height:100vh">
+            <div class="col-md-8 offset-md-2">
+                <div class="bento-box" id="bento-box" style="height:100vh">
+                    <a href="#players">
+                        <div class="box box1">
+                            <h2>Playes</h2>
+                            <p>This is the content of box 1.</p>
+                        </div>
+                    </a>
+
+                    <div class="box box2">
+                        <h2>Start journey</h2>
+                        <p>This is the content of box 2.</p>
+                    </div>
+                    <div class="box box3">
+                        <h2>Live</h2>
+                        <p>This is the content of box 3.</p>
+                    </div>
+                    <div class="box box4">
+                        <h2>Next game</h2>
+                        <p>This is the content of box 4.</p>
+                    </div>
+                    <div class="box box6">
+                        <h2>Pictures</h2>
+                        <p>This is the content of box 6.</p>
+                    </div>
+                    <div class="box box7">
+                        <h2>Players</h2>
+                    </div>
+                    <div class="box-container">
+                        <div class="box box-large box19">
+                            <slider-component></slider-component>
+                        </div>
+                        <div class="box-multi box20">
+                            <div class="sub-box">
+                                <a href="https://www.tiktok.com/@australski.nogome?refer=creator_embed">
+                                    <img src="../../images/social/tiktok.png" alt="">
+                                </a>
+                                <!-- <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@australski.nogome"
+                                    data-unique-id="australski.nogome" data-embed-type="creator"
+                                    style="max-width: 780px; min-width: 288px;">
+                                    <section>
+                                        <a target="_blank"
+                                            href="https://www.tiktok.com/@australski.nogome?refer=creator_embed"></a>
+                                    </section>
+                                </blockquote>
+                                <script async src="https://www.tiktok.com/embed.js"></script> -->
+                            </div>
+                            <div class="sub-box"><a href="https://www.youtube.com/channel/UC5YtdLORMv56silqOop3qGA">
+                                    <img src="../../images/social/youtube.png" alt=""></a></div>
+                            <div class="sub-box"><a href="https://www.instagram.com/sesvetedoubleblues/">
+                                    <img src="../../images/social/instagram.png" alt=""></a></div>
+                            <div class="sub-box"><a href="https://afleurope.org/">
+                                    <img src="../../images/social/afl.png" alt=""></a></div>
+                            <div class="sub-box"><a href="https://sanh.hr/"></a>
+                                <img src="../../images/social/sanh.png" alt="">
+                            </div>
+                            <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues">
+                                    <img src="../../images/social/face.png" alt=""></a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -76,4 +103,14 @@
         });
     </script>
 
-</template>
+</template>Photo by Ivo Brasil:
+https://www.pexels.com/photo/the-inside-of-the-arena-da-amazonia-in-manaus-amazonas-brazil-17673802/
+Photo by Ryan Klaus: https://www.pexels.com/photo/stadium-under-blue-sky-and-white-clouds-11990212/
+Photo by <a
+    href="https://unsplash.com/@nasiftzr?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Nasif
+    Tazwar</a> on <a
+    href="https://unsplash.com/photos/grey-concrete-figurine-oW8ph9u07uo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+Photo by <a
+    href="https://unsplash.com/@myprofittutor?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">My
+    Profit Tutor</a> on <a
+    href="https://unsplash.com/photos/a-close-up-of-a-soccer-ball-on-a-field-bXCNZAB-Eh4?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
