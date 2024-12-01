@@ -4,6 +4,7 @@ export class Router {
         if (!routes) {
             throw new Error('Routes parameter is mandatory');
         }
+        this.BASE_PATH = this.getBasePath();
         this.routes = routes;
         this.rootElem = document.getElementById('app');
         this.init();
@@ -22,9 +23,19 @@ export class Router {
         }
     }
 
+    getBasePath() {
+        // Check if running on GitHub Pages
+        if (window.location.hostname === 'avulic.github.io') {
+            return '/SesveteDoubleBlues';
+        }
+        // Local development
+        return '';
+    }
+
+
     goToRoute(htmlName) {
         if (typeof htmlName === 'string') {
-            const url = `components/${htmlName}`;
+            const url = `${this.BASE_PATH}/components/${htmlName}`.replace(/\/+/g, '/');
             fetch(url)
                 .then((response) => {
                     if (!response.ok) {
@@ -45,6 +56,7 @@ export class Router {
             this.rootElem.appendChild(htmlName);
         }
     }
+
 
     executeScriptTag(element) {
         // Get the script element in the Shadow DOM.
