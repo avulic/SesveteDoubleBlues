@@ -1,26 +1,27 @@
 this is my code:<template>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css" />
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-
-
     <div class="stadion"></div>
-
-
 
     <script>
         const scene = new THREE.Scene();
         const cssScene = new THREE.Scene(); // Separate scene for CSS objects
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
         scene.background = new THREE.Color(0xcccccc);
 
         // Create both WebGL and CSS renderers
@@ -37,9 +38,9 @@ this is my code:<template>
         renderer.toneMappingExposure = 1;
 
         // Style and position CSS renderer
-        cssRenderer.domElement.style.position = 'absolute';
-        cssRenderer.domElement.style.top = '0';
-        cssRenderer.domElement.style.pointerEvents = 'none'; // Let events pass through to WebGL
+        cssRenderer.domElement.style.position = "absolute";
+        cssRenderer.domElement.style.top = "0";
+        cssRenderer.domElement.style.pointerEvents = "none"; // Let events pass through to WebGL
 
         // Add both renderers
         var root = $(this.document.querySelector("stadion-component").shadowRoot);
@@ -55,17 +56,15 @@ this is my code:<template>
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
-
-
         // Function to create a CSS 3D object
         function createCSS3DElement(innerHTML, position, rotation, scale) {
             // Create div element
-            const element = document.createElement('div');
+            const element = document.createElement("div");
             element.innerHTML = innerHTML;
-            element.style.background = 'rgba(0, 127, 127, 0.8)';
-            element.style.padding = '20px';
-            element.style.borderRadius = '10px';
-            element.style.transform = 'translate(-50%, -50%)';
+            element.style.background = "rgba(0, 127, 127, 0.8)";
+            element.style.padding = "20px";
+            element.style.borderRadius = "10px";
+            element.style.transform = "translate(-50%, -50%)";
 
             // Create CSS3D object
             const objectCSS = new THREE.CSS3DObject(element);
@@ -131,106 +130,48 @@ this is my code:<template>
         );
         cssScene.add(cssObject2);
 
-
-
-
-
         // Add orbit controls
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        const cameraInfo = document.createElement('div');
-        cameraSetup();
+        const cameraInfo = document.createElement("div");
+        let initialCameraPosition = null;
 
-        const loader = new THREE.GLTFLoader();
-
-        loader.load(
-            '../../assets/stadion/export/web_stadion_v2.glb',
-            function (gltf) {
-                gltf.scene.traverse((child) => {
-                    if (child.isMesh) {
-                        if (child.material) {
-                            if (child.material.name === 'Material.004') {
-                                child.material.color.setRGB(1, 0, 0);
-                            }
-                            child.material.needsUpdate = true;
-                            child.material.metalness = 0;
-                            child.material.roughness = 0.5;
-                        }
-                    }
-                });
-
-                const box = new THREE.Box3().setFromObject(gltf.scene);
-                const center = box.getCenter(new THREE.Vector3());
-                gltf.scene.position.sub(center);
-
-                scene.add(gltf.scene);
-
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const fov = camera.fov * (Math.PI / 180);
-                let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
-
-                camera.position.set(cameraZ, cameraZ * 1, cameraZ);
-                camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-                // Store initial camera position after model is loaded
-                initialCameraPosition = camera.position.clone();
-
-                // Initialize player cards after model is loaded
-                animate();
-                initializePlayerCards();
-
-                updateCSSPosition();
-            },
-            function (xhr) {
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            function (error) {
-                console.log('An error happened' + { error });
-            }
-        );
-
-
-
-        // Handle window resizing
-        window.addEventListener('resize', onWindowResize, false);
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            cssRenderer.setSize(window.innerWidth, window.innerHeight);
+        function updateCameraInfo() {
+            cameraInfo.innerHTML = `
+            Camera Position:
+            X: ${camera.position.x.toFixed(2)}
+            Y: ${camera.position.y.toFixed(2)}
+            Z: ${camera.position.z.toFixed(2)}
+            
+            Target Position:
+            X: ${controls.target.x.toFixed(2)}
+            Y: ${controls.target.y.toFixed(2)}
+            Z: ${controls.target.z.toFixed(2)}
+            
+            Distance to Target: ${camera.position
+                    .distanceTo(controls.target)
+                    .toFixed(2)}
+        `.replace(/\n/g, "<br>");
         }
 
-
-        function cameraSetup() {
-
-
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.screenSpacePanning = false;
-            controls.minDistance = 1;
-            controls.maxDistance = 100;
-
-
-            cameraInfo.style.position = 'absolute';
-            cameraInfo.style.top = '10px';
-            cameraInfo.style.left = '10px';
-            cameraInfo.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            cameraInfo.style.color = 'white';
-            cameraInfo.style.padding = '10px';
-            cameraInfo.style.fontFamily = 'monospace';
-            cameraInfo.style.fontSize = '12px';
+        function showCoordinates() {
+            cameraInfo.style.position = "absolute";
+            cameraInfo.style.top = "10px";
+            cameraInfo.style.left = "10px";
+            cameraInfo.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            cameraInfo.style.color = "white";
+            cameraInfo.style.padding = "10px";
+            cameraInfo.style.fontFamily = "monospace";
+            cameraInfo.style.fontSize = "12px";
             root.find(".stadion").append(cameraInfo);
 
             // Create camera control panel
-            const controlPanel = document.createElement('div');
-            controlPanel.style.position = 'absolute';
-            controlPanel.style.top = '10px';
-            controlPanel.style.right = '10px';
-            controlPanel.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            controlPanel.style.color = 'white';
-            controlPanel.style.padding = '10px';
+            const controlPanel = document.createElement("div");
+            controlPanel.style.position = "absolute";
+            controlPanel.style.top = "10px";
+            controlPanel.style.right = "10px";
+            controlPanel.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            controlPanel.style.color = "white";
+            controlPanel.style.padding = "10px";
             controlPanel.innerHTML = `
         <div style="margin-bottom: 10px;">
             <button onclick="moveCamera('x', 1)">X+</button>
@@ -253,21 +194,21 @@ this is my code:<template>
             root.find(".stadion").append(controlPanel);
 
             // Store initial camera position for reset
-            let initialCameraPosition = null;
+            //let initialCameraPosition = null;
 
             // Function to move camera
             window.moveCamera = function (axis, amount) {
                 const moveAmount = 1; // Amount to move per click
                 switch (axis) {
-                    case 'x':
+                    case "x":
                         camera.position.x += amount * moveAmount;
                         controls.target.x += amount * moveAmount;
                         break;
-                    case 'y':
+                    case "y":
                         camera.position.y += amount * moveAmount;
                         controls.target.y += amount * moveAmount;
                         break;
-                    case 'z':
+                    case "z":
                         camera.position.z += amount * moveAmount;
                         controls.target.z += amount * moveAmount;
                         break;
@@ -286,16 +227,25 @@ this is my code:<template>
                     (camera.position.y - controls.target.y) / radius
                 );
 
-                if (direction === 'horizontal') {
+                if (direction === "horizontal") {
                     const newAzimuth = currentAzimuth + amount;
-                    camera.position.x = controls.target.x + radius * Math.sin(newAzimuth) * Math.sin(currentPolar);
-                    camera.position.z = controls.target.z + radius * Math.cos(newAzimuth) * Math.sin(currentPolar);
-                } else if (direction === 'vertical') {
-                    const newPolar = Math.max(0.1, Math.min(Math.PI - 0.1, currentPolar - amount));
+                    camera.position.x =
+                        controls.target.x +
+                        radius * Math.sin(newAzimuth) * Math.sin(currentPolar);
+                    camera.position.z =
+                        controls.target.z +
+                        radius * Math.cos(newAzimuth) * Math.sin(currentPolar);
+                } else if (direction === "vertical") {
+                    const newPolar = Math.max(
+                        0.1,
+                        Math.min(Math.PI - 0.1, currentPolar - amount)
+                    );
                     camera.position.y = controls.target.y + radius * Math.cos(newPolar);
                     const sinPolar = Math.sin(newPolar);
-                    camera.position.x = controls.target.x + radius * Math.sin(currentAzimuth) * sinPolar;
-                    camera.position.z = controls.target.z + radius * Math.cos(currentAzimuth) * sinPolar;
+                    camera.position.x =
+                        controls.target.x + radius * Math.sin(currentAzimuth) * sinPolar;
+                    camera.position.z =
+                        controls.target.z + radius * Math.cos(currentAzimuth) * sinPolar;
                 }
 
                 camera.lookAt(controls.target);
@@ -313,21 +263,98 @@ this is my code:<template>
             };
         }
 
+        function cameraSetup() {
+            // Existing camera controls setup
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.rotateSpeed = 0.3;
 
-        function updateCameraInfo() {
-            cameraInfo.innerHTML = `
-            Camera Position:
-            X: ${camera.position.x.toFixed(2)}
-            Y: ${camera.position.y.toFixed(2)}
-            Z: ${camera.position.z.toFixed(2)}
-            
-            Target Position:
-            X: ${controls.target.x.toFixed(2)}
-            Y: ${controls.target.y.toFixed(2)}
-            Z: ${controls.target.z.toFixed(2)}
-            
-            Distance to Target: ${camera.position.distanceTo(controls.target).toFixed(2)}
-        `.replace(/\n/g, '<br>');
+            // More restrictive camera movement limits
+            controls.minPolarAngle = Math.PI / 6; // Limit vertical rotation (prevent looking directly up/down)
+            controls.maxPolarAngle = (Math.PI * 5) / 9; // Prevent flipping camera upside down
+
+            // Distance limits (adjust these based on your scene)
+            controls.minDistance = 20; // Minimum zoom in distance
+            controls.maxDistance = 50; // Maximum zoom out distance
+
+            // Optionally, limit horizontal rotation if needed
+            //controls.minAzimuthAngle = -Math.PI / 6;  // Left rotation limit
+            //controls.maxAzimuthAngle = Math.PI / 6;   // Right rotation limit
+        }
+
+        const loader = new THREE.GLTFLoader();
+
+        loader.load(
+            "../assets/stadion/export/web_stadion_v2.glb",
+            function (gltf) {
+                gltf.scene.traverse((child) => {
+                    if (child.isMesh) {
+                        if (child.material) {
+                            if (child.material.name === "Material.004") {
+                                child.material.color.setRGB(1, 0, 0);
+                            }
+                            child.material.needsUpdate = true;
+                            child.material.metalness = 0;
+                            child.material.roughness = 0.5;
+                        }
+                    }
+                });
+
+                const box = new THREE.Box3().setFromObject(gltf.scene);
+                const center = box.getCenter(new THREE.Vector3());
+                gltf.scene.position.sub(center);
+
+                scene.add(gltf.scene);
+
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const fov = camera.fov * (Math.PI / 180); // from degrees to radians
+                let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
+
+                // Calculate camera position for 90-degree rotation
+                const angle = Math.PI / 1; // 90 degrees in radians
+                const cameraX = cameraZ * Math.cos(angle);
+                const cameraY = cameraZ * Math.sin(angle);
+
+                //camera.position.set(cameraX, cameraZ, cameraY);
+                camera.position.x = 53;
+                camera.position.y = 30;
+                camera.position.z = 0;
+
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+                controls.target.x = 38;
+                controls.target.y = 17;
+                controls.target.z = 0;
+
+                controls.update();
+                controls.saveState();
+
+                initializePlayerCards();
+                showCoordinates();
+                cameraSetup();
+                updateCSSPosition();
+
+                animate();
+            },
+            function (xhr) {
+                console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+            },
+            function (error) {
+                console.log("An error happened" + { error });
+            }
+        );
+
+        // Handle window resizing
+        window.addEventListener("resize", onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            cssRenderer.setSize(window.innerWidth, window.innerHeight);
         }
 
         const futCardStyles = `
@@ -335,12 +362,14 @@ this is my code:<template>
                         position: relative;
                         width: 200px;
                         margin: 20px;
+                        
                     }
 
                     #fut-card {
                         position: relative;
                         width: 200px;
                         height: 250px;
+                        
                     }
 
                     #fut-card img {
@@ -424,220 +453,264 @@ this is my code:<template>
             `;
         }
 
-
-
-
         // Function to create player cards as CSS3D objects
         function createPlayerCards(scene, cssScene) {
-            ASSET_URL = '../../images/players/profil/';
-            FUT_CARD_ASSET_URL = '../../images/players/fut/';
-            PLAYER_ASSET_URL = '../../images/players/crop/';
+            ASSET_URL = "../../images/players/profil/";
+            FUT_CARD_ASSET_URL = "../../images/players/fut/";
+            PLAYER_ASSET_URL = "../../images/players/crop/";
 
             data = {
                 players: {
                     home: [
                         {
-                            name: 'Duksi',
-                            asset: 'Duksi',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'FB',
-                            dob: '36',
+                            name: "Duksi",
+                            asset: "Duksi",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "FB",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-31, -34], y: -210, z: 42, left: 50 }
+                            position: { x: [-31, -34], y: -210, z: 42, left: 50 },
                         },
                         {
-                            name: 'Dinko',
-                            asset: 'Dinko',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'HB',
-                            dob: '36',
+                            name: "Dinko",
+                            asset: "Dinko",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "HB",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: -111, z: 42, left: 26 }
+                            position: { x: [-21, -27], y: -111, z: 42, left: 26 },
                         },
                         {
-                            name: 'Neno',
-                            asset: 'Neno',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'HB',
-                            dob: '36',
+                            name: "Neno",
+                            asset: "Neno",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "HB",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-22, -34], y: -111, z: 40, left: 72 }
+                            position: { x: [-22, -34], y: -111, z: 40, left: 72 },
                         },
                         {
-                            name: 'Mole',
-                            asset: 'Mole',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'R',
-                            dob: '36',
+                            name: "Mole",
+                            asset: "Mole",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "R",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: 51, z: 42, left: 63 }
+                            position: { x: [-21, -27], y: 51, z: 42, left: 63 },
                         },
                         {
-                            name: 'Vele',
-                            asset: 'Vele',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'R',
-                            dob: '36',
+                            name: "Vele",
+                            asset: "Vele",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "R",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: 128, z: 42, left: 49 }
+                            position: { x: [-21, -27], y: 128, z: 42, left: 49 },
                         },
                         {
-                            name: 'Piksi',
-                            asset: 'Piksi',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'R',
-                            dob: '36',
+                            name: "Piksi",
+                            asset: "Piksi",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "R",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: 51, z: 42, left: 36 }
+                            position: { x: [-21, -27], y: 51, z: 42, left: 36 },
                         },
                         {
-                            name: 'Kolja',
-                            asset: 'Kolja',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'HF',
-                            dob: '36',
+                            name: "Kolja",
+                            asset: "Kolja",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "HF",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: 267, z: 42, left: 70 }
+                            position: { x: [-21, -27], y: 267, z: 42, left: 70 },
                         },
                         {
-                            name: 'Zgela',
-                            asset: 'Zgela',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'HF',
-                            dob: '36',
+                            name: "Zgela",
+                            asset: "Zgela",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "HF",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-21, -27], y: 265, z: 42, left: 29 }
+                            position: { x: [-21, -27], y: 265, z: 42, left: 29 },
                         },
                         {
-                            name: 'Mac',
-                            asset: 'Mac',
-                            origin: 'Peru',
-                            height: '1.84m',
-                            shirt: '14',
-                            pos: 'FF',
-                            dob: '36',
+                            name: "Mac",
+                            asset: "Mac",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "FF",
+                            dob: "36",
                             goals: 1,
                             games: 16,
-                            position: { x: [-31, -34], y: 337, z: 42, left: 50 }
+                            position: { x: [-31, -34], y: 337, z: 42, left: 50 },
                         },
-
                     ],
                     away: [
                         {
-                            name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+                            name: "Pizarro",
+                            asset: "bm-pizarro.jpg",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "Forward",
+                            dob: "36",
+                            goals: 1,
+                            games: 16,
+                            x: 110,
+                            y: -190,
                         },
                         {
-                            name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+                            name: "Pizarro",
+                            asset: "bm-pizarro.jpg",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "Forward",
+                            dob: "36",
+                            goals: 1,
+                            games: 16,
+                            x: 110,
+                            y: -190,
                         },
                         {
-                            name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+                            name: "Pizarro",
+                            asset: "bm-pizarro.jpg",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "Forward",
+                            dob: "36",
+                            goals: 1,
+                            games: 16,
+                            x: 110,
+                            y: -190,
                         },
                         {
-                            name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+                            name: "Pizarro",
+                            asset: "bm-pizarro.jpg",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "Forward",
+                            dob: "36",
+                            goals: 1,
+                            games: 16,
+                            x: 110,
+                            y: -190,
                         },
                         {
-                            name: 'Pizarro', asset: 'bm-pizarro.jpg', origin: 'Peru', height: '1.84m', shirt: '14', pos: 'Forward', dob: '36', goals: 1, games: 16, x: 110, y: -190
+                            name: "Pizarro",
+                            asset: "bm-pizarro.jpg",
+                            origin: "Peru",
+                            height: "1.84m",
+                            shirt: "14",
+                            pos: "Forward",
+                            dob: "36",
+                            goals: 1,
+                            games: 16,
+                            x: 110,
+                            y: -190,
                         },
-
                     ],
-                }
+                },
             };
 
-            const position = getObjectSizeFromBoundingBox('Circle002');
-            const position2 = get3DObjectScreenPosition('Circle002', camera, renderer);
-            console.log(position)
+            const position = getObjectSizeFromBoundingBox("Circle002");
+            const position2 = get3DObjectScreenPosition(
+                "Circle002",
+                camera,
+                renderer
+            );
 
             const players = data.players.home;
-            const fieldWidth = position2.width;   // meters
-            const fieldLength = position2.height;  // meters
+            const fieldWidth = position2.width; // meters
+            const fieldLength = position2.height; // meters
             const players_coord = generatePlayerPositions(fieldWidth, fieldLength);
             var i = 0;
-            players.forEach(player => {
+            players.forEach((player) => {
                 // Function to create FUT card HTM
                 cardHTML = createFutCard(player);
 
-                // cardHTML = `
-                //     <div style="position: relative;">
-                //         <button onclick="this.parentElement.parentElement.remove()" 
-                //                 style="position: absolute; right: 10px; top: 10px; 
-                //                     border: none; background: none; cursor: pointer;">×</button>
-                //         <img src="${FUT_CARD_ASSET_URL}Empty.png" style="width: 300px;">
-                //         <div style="position: absolute; top: 50px; width: 100%; text-align: center;">
-                //             <h2>${player.name}</h2>
-                //             <p>Position: ${player.pos}</p>
-                //             <p>Height: ${player.height}</p>
-                //             <p>Origin: ${player.origin}</p>
-                //             <p>Games: ${player.games}</p>
-                //             <p>Goals: ${player.goals}</p>
-                //         </div>
-                //     </div>
-                // `;
-
                 // Create CSS3D object
-                const element = document.createElement('div');
+                const element = document.createElement("div");
                 element.innerHTML = cardHTML;
                 const objectCSS = new THREE.CSS3DObject(element);
 
                 // Convert field coordinates to 3D space
                 // Adjust these multipliers based on your stadium scale
                 const x = players_coord[i].x;
-                const y = -3;
-                const z = players_coord[i].y;
+                const y = players_coord[i].y;
+                const z = 1;
 
                 // Position the card
-                objectCSS.position.set(x, y, z);
+                objectCSS.position.set(x, -10, y);
+
+                //objectCSS.position.set(x, z, 0);
                 // Rotate to face camera
-                objectCSS.rotation.set(0, Math.PI / 2, 0);
+                // objectCSS.rotation.set(Math.PI / 4, Math.PI / 2, 0);
+                // Rotate around X axis to tilt upwards
+                //objectCSS.rotateX(0);
+
+                // Then rotate around Y axis
+                objectCSS.rotateY(Math.PI / 2);
+                //objectCSS.rotateZ(0);
+
+                console.log("🚀 ~ players.forEach ~ objectCSS.rotation.x:", objectCSS.rotation.x)
+                console.log("🚀 ~ players.forEach ~ objectCSS.rotation.y:", objectCSS.rotation.y)
+                console.log("🚀 ~ players.forEach ~ objectCSS.rotation.z:", objectCSS.rotation.z)
                 // Scale to fit in the scene
                 objectCSS.scale.set(0.07, 0.07, 0.07);
 
                 // Add click interaction
-                element.addEventListener('click', () => {
+                element.addEventListener("click", () => {
                     showPlayerDetails(player);
                 });
 
                 // Add to CSS scene
                 cssScene.add(objectCSS);
-                i = i + 1
+                i = i + 1;
             });
+
         }
 
         // Function to show detailed player card
         function showPlayerDetails(player) {
-            const detailCard = document.createElement('div');
-            detailCard.style.position = 'fixed';
-            detailCard.style.top = '50%';
-            detailCard.style.left = '50%';
-            detailCard.style.transform = 'translate(-50%, -50%)';
-            detailCard.style.zIndex = '1000';
-            detailCard.style.background = 'white';
-            detailCard.style.padding = '20px';
-            detailCard.style.borderRadius = '10px';
-            detailCard.style.boxShadow = '0 0 20px rgba(0,0,0,0.2)';
+            const detailCard = document.createElement("div");
+            detailCard.style.position = "fixed";
+            detailCard.style.top = "50%";
+            detailCard.style.left = "50%";
+            detailCard.style.transform = "translate(-50%, -50%)";
+            detailCard.style.zIndex = "1000";
+            detailCard.style.background = "white";
+            detailCard.style.padding = "20px";
+            detailCard.style.borderRadius = "10px";
+            detailCard.style.boxShadow = "0 0 20px rgba(0,0,0,0.2)";
 
             detailCard.innerHTML = `
         <div style="position: relative;">
@@ -661,7 +734,6 @@ this is my code:<template>
 
         // Initialize the player cards
         function initializePlayerCards() {
-            console.log(scene.children.find(e => e.name == "Scene"))
             // console.log(scene.children.find(e => e.name == "Scene").children.find(a => a.name == "Circle001"))
             // console.log(scene.getObjectByName('Circle002'))
 
@@ -669,10 +741,6 @@ this is my code:<template>
             // Create the player cards
             createPlayerCards(scene, cssScene);
         }
-
-
-
-
 
         function get3DObjectScreenPosition(objectName, camera, renderer) {
             // Get the object
@@ -697,7 +765,7 @@ this is my code:<template>
 
                 // Check if bounding box is valid
                 if (boundingBox.min.x === Infinity || boundingBox.max.x === -Infinity) {
-                    console.warn('Invalid bounding box');
+                    console.warn("Invalid bounding box");
                     return null;
                 }
 
@@ -715,34 +783,30 @@ this is my code:<template>
                 const widthHalf = renderer.domElement.width / 2;
                 const heightHalf = renderer.domElement.height / 2;
 
-                console.log("blender siz")
-                console.log(boundingBox)
-                console.log(vector)
-                console.log(renderer.domElement)
-
                 return {
-                    x: (vector.x * widthHalf) + widthHalf,
+                    x: vector.x * widthHalf + widthHalf,
                     y: -(vector.y * heightHalf) + heightHalf,
                     scale: size.length() / Math.max(0.1, vector.z),
                     width: size.x,
                     height: size.y,
                 };
             } catch (error) {
-                console.warn('Error calculating object position:', error);
+                console.warn("Error calculating object position:", error);
                 return null;
             }
         }
 
-
         function getObjectSizeFromBoundingBox(object) {
             // Create a new bounding box
-            const boundingBox = new THREE.Box3().setFromObject(scene.getObjectByName(object));
+            const boundingBox = new THREE.Box3().setFromObject(
+                scene.getObjectByName(object)
+            );
 
             // Get the dimensions
             const size = {
                 width: boundingBox.max.x - boundingBox.min.x,
                 height: boundingBox.max.z - boundingBox.min.z,
-                depth: boundingBox.max.y - boundingBox.min.y
+                depth: boundingBox.max.y - boundingBox.min.y,
             };
 
             // Get the center point
@@ -751,52 +815,51 @@ this is my code:<template>
 
             return {
                 dimensions: size,
-                center: center
+                center: center,
             };
         }
 
         // Update CSS element position in animation loop
         function updateCSSPosition() {
             // Assuming you have your 3D object from Blender
-            const position = getObjectSizeFromBoundingBox('Circle001');
-            console.log(position)
+            //const position = getObjectSizeFromBoundingBox('Circle001');
+            //console.log(position)
             // Apply to your CSS element
             // const cssElement = root.find('#fut-card-container');
-
             // cssElement.style.position = 'absolute';
             // cssElement.style.left = `${position.x}px`;
             // cssElement.style.top = `${position.y}px`;
-
             // // // Optional: Scale the CSS element based on distance
             // const scale = Math.min(Math.max(position.scale, 0.5), 2); // Limit scale between 0.5 and 2
             // cssElement.style.transform = `translate(-50%, -50%) scale(${scale})`;
         }
 
-        ASSET_URL = '../../images/players/profil/';
-        FUT_CARD_ASSET_URL = '../../images/players/fut/';
-        PLAYER_ASSET_URL = '../../images/players/crop/';
-        const card = `
-            <style>${futCardStyles}</style>
-                <div id="fut-card-container" class="sdas">
-                    <button class="remove-button" onclick="this.parentElement.remove()">×</button>
-                    <div id="fut-card">
-                        <img src="${FUT_CARD_ASSET_URL}Empty.png" alt="Card Background">
-                        <span id="fut-card-name">"fvsd"</span>
-                        <span id="fut-card-value">"94"</span>
-                        <span id="fut-card-position">"Ruckman"</span>
-                    </div>
-                    <div id="fut-card-player">
-                        <img src="${PLAYER_ASSET_URL}Jure_crop.png" alt="Player Image">
-                    </div>
-                </div>`;
+        ASSET_URL = "../../images/players/profil/";
+        FUT_CARD_ASSET_URL = "../../images/players/fut/";
+        PLAYER_ASSET_URL = "../../images/players/crop/";
 
-        const cardObject1 = createCSS3DElement(
-            card,
-            new THREE.Vector3(48, -10, 20),
-            new THREE.Euler(0, Math.PI / 2, 0),
-            new THREE.Vector3(0.05, 0.05, 0.05)
-        );
-        cssScene.add(cardObject1);
+        // const card = `
+        //     <style>${futCardStyles}</style>
+        //         <div id="fut-card-container" class="sdas">
+        //             <button class="remove-button" onclick="this.parentElement.remove()">×</button>
+        //             <div id="fut-card">
+        //                 <img src="${FUT_CARD_ASSET_URL}Empty.png" alt="Card Background">
+        //                 <span id="fut-card-name">"fvsd"</span>
+        //                 <span id="fut-card-value">"94"</span>
+        //                 <span id="fut-card-position">"Ruckman"</span>
+        //             </div>
+        //             <div id="fut-card-player">
+        //                 <img src="${PLAYER_ASSET_URL}Jure_crop.png" alt="Player Image">
+        //             </div>
+        //         </div>`;
+
+        // const cardObject1 = createCSS3DElement(
+        //     card,
+        //     new THREE.Vector3(48, -10, 20),
+        //     new THREE.Euler(0, Math.PI / 2, 0),
+        //     new THREE.Vector3(0.05, 0.05, 0.05)
+        // );
+        // cssScene.add(cardObject1);
 
         function animate() {
             requestAnimationFrame(animate);
@@ -809,80 +872,79 @@ this is my code:<template>
             cssRenderer.render(cssScene, camera);
         }
 
-        function generatePlayerPositions(fieldWidth, fieldLength) {
-            // Calculate half dimensions for easier positioning
-            const halfWidth = fieldWidth / 2;
-            const halfLength = fieldLength / 2;
-
-            // Define formation lines (as percentage from center)
-            const defenderLine = -0.3;    // 30% behind center
-            const midfielderLine = 0;     // At center
-            const strikerLine = 0.3;      // 30% ahead of center
+        function generatePlayerPositions() {
+            // Field dimensions based on given coordinates
+            const fieldWidth = 50; // Now using the original length as width
+            const fieldLength = 90; // Now using the original width as length
 
             // Player height range (in meters)
             const minHeight = 0;
             const maxHeight = 0.1;
 
             const positions = [
-                // 4 Defenders
+                // 1 Goalkeeper
                 {
-                    x: -halfWidth * 0.6,  // Left defender
-                    y: halfLength * defenderLine,
+                    x: 40,
+                    y: 0,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Left Back"
-                },
-                {
-                    x: -halfWidth * 0.2,  // Left center back
-                    y: halfLength * defenderLine,
-                    z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Center Back Left"
-                },
-                {
-                    x: halfWidth * 0.2,   // Right center back
-                    y: halfLength * defenderLine,
-                    z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Center Back Right"
-                },
-                {
-                    x: halfWidth * 0.6,   // Right defender
-                    y: halfLength * defenderLine,
-                    z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Right Back"
+                    position: "Goalkeeper",
                 },
 
-                // 4 Midfielders
+                // 2 Defenders
                 {
-                    x: -halfWidth * 0.6,  // Left midfielder
-                    y: halfLength * midfielderLine,
+                    x: 45 * 0.5,
+                    y: 25 * 0.4,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Left Midfielder"
+                    position: "Left Defender",
                 },
                 {
-                    x: -halfWidth * 0.2,  // Left center midfielder
-                    y: halfLength * midfielderLine,
+                    x: 45 * 0.5,
+                    y: -25 * 0.4,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Center Midfielder Left"
+                    position: "Right Defender",
+                },
+
+                // 3 Midfielders
+                {
+                    x: 0,
+                    y: 25 * 0.4,
+                    z: Math.random() * (maxHeight - minHeight) + minHeight,
+                    position: "Left Defensive Midfielder",
                 },
                 {
-                    x: halfWidth * 0.2,   // Right center midfielder
-                    y: halfLength * midfielderLine,
+                    x: 15,
+                    y: 0,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Center Midfielder Right"
+                    position: "Central Midfielder",
                 },
                 {
-                    x: halfWidth * 0.6,   // Right midfielder
-                    y: halfLength * midfielderLine,
+                    x: 0,
+                    y: -25 * 0.4,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Right Midfielder"
+                    position: "Right Defensive Midfielder",
+                },
+
+                // 2 Attacking Midfielders
+                {
+                    x: -45 * 0.6,
+                    y: -25 * 0.4,
+                    z: Math.random() * (maxHeight - minHeight) + minHeight,
+                    position: "Left Attacking Midfielder",
+                },
+                {
+                    x: -45 * 0.6,
+                    y: 25 * 0.4,
+                    z: Math.random() * (maxHeight - minHeight) + minHeight,
+                    position: "Right Attacking Midfielder",
                 },
 
                 // 1 Striker
                 {
-                    x: 0,                 // Center striker
-                    y: halfLength * strikerLine,
+                    x: -40,
+                    y: 0,
                     z: Math.random() * (maxHeight - minHeight) + minHeight,
-                    position: "Striker"
-                }
+                    position: "Striker",
+                },
             ];
 
             return positions;

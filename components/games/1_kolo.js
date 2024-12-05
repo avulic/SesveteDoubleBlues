@@ -1,7 +1,7 @@
 import { fetchComponent, parseElement, parseTemplateElement } from "../../js/index.js";
 
 
-export class Kolo1 extends HTMLElement {
+export class Kolo_1 extends HTMLElement {
     constructor() {
         super();
     }
@@ -17,14 +17,27 @@ export class Kolo1 extends HTMLElement {
             });
         }
     }
+
+    executeScriptTag(element) {
+        // Get the script element in the Shadow DOM.
+        const scriptElements = element.getElementsByTagName('script');
+        // Check if a script element exists.
+        if (scriptElements.length > 1) {
+            scriptElements.forEach((scriptElement) => {
+                const script = document.createElement('script');
+                script.textContent = scriptElement.textContent;
+                document.body.appendChild(script);
+            });
+        }
+        if (scriptElements.length === 1) {
+            const script = document.createElement('script');
+            script.textContent = scriptElements[0].textContent;
+            document.body.appendChild(script);
+        }
+    }
 }
 
 
-function updateStyle() {
-    // Apply external styles to the shadow dom
-    const linkElem = document.createElement("link");
-    linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "styles.css");
-}
 
-customElements.define('kolo1-component', Kolo1);
+
+customElements.define('kolo1-component', Kolo_1);

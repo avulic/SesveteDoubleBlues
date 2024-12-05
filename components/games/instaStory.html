@@ -1,0 +1,508 @@
+<template>
+
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Instagram Stories Clone</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #fafafa;
+            }
+
+            .app-container {
+                width: 100%;
+                height: 100%;
+                background-color: white;
+                border: 1px solid #dbdbdb;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+            }
+
+            .highlights-navbar {
+                display: flex;
+                padding: 10px;
+                background-color: white;
+                border-bottom: 1px solid #dbdbdb;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .highlights-navbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .highlight-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 15px;
+                cursor: pointer;
+            }
+
+            .highlight-avatar {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                border: 2px solid transparent;
+                object-fit: cover;
+            }
+
+            .highlight-avatar.active {
+                border-color: #c32aa3;
+            }
+
+            .highlight-name {
+                margin-top: 5px;
+                font-size: 12px;
+                max-width: 60px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .stories-container {
+                /* width: 375px; */
+                height: 88%;
+                background-color: white;
+                border: 1px solid #dbdbdb;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .story {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                transition: opacity 0.5s ease;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .story.active {
+                opacity: 1;
+            }
+
+            .story-image {
+                flex-grow: 1;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            .story-progress {
+                display: flex;
+                height: 4px;
+                background-color: #e0e0e0;
+                margin: 10px;
+            }
+
+            .story-progress-bar {
+                height: 100%;
+                background-color: #3897f0;
+                width: 0;
+            }
+
+            .story-user {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+                color: white;
+            }
+
+            .story-user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .nav-buttons {
+                position: absolute;
+                top: 50%;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                transform: translateY(-50%);
+            }
+
+            .nav-button {
+                background: rgba(0, 0, 0, 0.3);
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section id="instagram-section" class="container p-1" style="height: 100%;">
+            <div class="app-container">
+                <div class="highlights-navbar" id="highlightsNavbar"></div>
+                <div class="stories-container"></div>
+                <div class="nav-buttons">
+                    <button class="nav-button" id="prevButton">&lt;</button>
+                    <button class="nav-button" id="nextButton">&gt;</button>
+                </div>
+            </div>
+        </section>
+        <script>
+            var root = $(this.document.querySelector("insta-component").shadowRoot);
+            var currentStorysLenght;
+
+            var kolo_1 = `375057485_7228883480496102_4948072847642393362_n.jpg
+            375061254_7232291830155267_8284817309548672709_n.jpg
+            375831242_7232287576822359_8613405140488834243_n.jpg
+            375836997_7228882660496184_8740625853034799194_n.jpg
+            375855999_7228887270495723_1106534234420878380_n.jpg
+            375858389_7228883663829417_4005672382341171786_n.jpg
+            375859318_7228877917163325_1233233802625861396_n.jpg
+            375859667_7232291063488677_8493657565411335797_n.jpg
+            375860480_7228879537163163_5304988127158153933_n.jpg
+            375863331_7228878280496622_6210706986701461515_n.jpg
+            375863530_7228883403829443_4160782797141391096_n.jpg
+            375866037_7232289083488875_8168644802650282243_n.jpg
+            375873191_7228885997162517_2405482187488329967_n.jpg
+            375898797_7228887603829023_150061381568365249_n.jpg
+            375898816_7228882887162828_3850494946696397949_n.jpg
+            375910033_7232289180155532_1430249006621458925_n.jpg
+            375910079_7228886990495751_4060089550958330317_n.jpg
+            375913825_7228885650495885_3132908092415730320_n.jpg
+            375924011_7232287180155732_243935921972880709_n.jpg
+            375949593_7228881823829601_7483487844338166439_n.jpg
+            375949917_7232291123488671_5378912160319934621_n.jpg
+            375954298_7228885157162601_8804028396857046981_n.jpg
+            375958460_7228881797162937_4066705107280626182_n.jpg
+            375966452_7232289723488811_490783516789373660_n.jpg
+            375970777_7228885597162557_8768414577334437910_n.jpg
+            375971544_7232289766822140_6911541932056607292_n.jpg
+            375975199_7228884953829288_6900118090868104714_n.jpg
+            375976748_7232287440155706_3933402398458208277_n.jpg
+            375977140_7232292443488539_5574035374780353269_n.jpg
+            375978411_7228887563829027_2891029784606722388_n.jpg
+            375982086_7228878333829950_1235399243061481278_n.jpg
+            375985101_7228878213829962_5962092867917170394_n.jpg
+            375989757_7228881080496342_5744618903306789666_n.jpg
+            375999440_7228882863829497_474429094841980163_n.jpg
+            375999463_7232291166822000_375871344303452422_n.jpg
+            376048479_7228882323829551_3653068499918098702_n.jpg
+            376057602_7228886447162472_4039172064557736122_n.jpg
+            376201124_7228883097162807_3264520812174933566_n.jpg
+            376228828_7228885850495865_6216581586989470919_n.jpg
+            376236474_7228877987163318_7257646588241330208_n.jpg
+            376251581_7228885523829231_5647916388908968544_n.jpg
+            376258472_7228882130496237_1879071460347063869_n.jpg
+            376269642_7228884890495961_2523967041520006589_n.jpg
+            376269926_7232289253488858_6141641760010166539_n.jpg
+            376271371_7228887043829079_5009823964228214961_n.jpg
+            376281619_7228880110496439_4807415270560161575_n.jpg
+            376860143_7228878370496613_648049614358167243_n.jpg
+            376874355_7228881920496258_6138688203418132225_n.jpg`
+
+            var kolo_2 = `375057485_7228883480496102_4948072847642393362_n.jpg
+            375061254_7232291830155267_8284817309548672709_n.jpg
+            375831242_7232287576822359_8613405140488834243_n.jpg
+            375836997_7228882660496184_8740625853034799194_n.jpg
+            375855999_7228887270495723_1106534234420878380_n.jpg
+            375858389_7228883663829417_4005672382341171786_n.jpg
+            375859318_7228877917163325_1233233802625861396_n.jpg
+            375859667_7232291063488677_8493657565411335797_n.jpg
+            375860480_7228879537163163_5304988127158153933_n.jpg
+            375863331_7228878280496622_6210706986701461515_n.jpg
+            375863530_7228883403829443_4160782797141391096_n.jpg
+            375866037_7232289083488875_8168644802650282243_n.jpg
+            375873191_7228885997162517_2405482187488329967_n.jpg
+            375898797_7228887603829023_150061381568365249_n.jpg
+            375898816_7228882887162828_3850494946696397949_n.jpg
+            375910033_7232289180155532_1430249006621458925_n.jpg
+            375910079_7228886990495751_4060089550958330317_n.jpg
+            375913825_7228885650495885_3132908092415730320_n.jpg
+            375924011_7232287180155732_243935921972880709_n.jpg
+            375949593_7228881823829601_7483487844338166439_n.jpg
+            375949917_7232291123488671_5378912160319934621_n.jpg
+            375954298_7228885157162601_8804028396857046981_n.jpg
+            375958460_7228881797162937_4066705107280626182_n.jpg
+            375966452_7232289723488811_490783516789373660_n.jpg
+            375970777_7228885597162557_8768414577334437910_n.jpg
+            375971544_7232289766822140_6911541932056607292_n.jpg
+            375975199_7228884953829288_6900118090868104714_n.jpg
+            375976748_7232287440155706_3933402398458208277_n.jpg
+            375977140_7232292443488539_5574035374780353269_n.jpg
+            375978411_7228887563829027_2891029784606722388_n.jpg
+            375982086_7228878333829950_1235399243061481278_n.jpg
+            375985101_7228878213829962_5962092867917170394_n.jpg
+            375989757_7228881080496342_5744618903306789666_n.jpg
+            375999440_7228882863829497_474429094841980163_n.jpg
+            375999463_7232291166822000_375871344303452422_n.jpg
+            376048479_7228882323829551_3653068499918098702_n.jpg
+            376057602_7228886447162472_4039172064557736122_n.jpg
+            376201124_7228883097162807_3264520812174933566_n.jpg
+            376228828_7228885850495865_6216581586989470919_n.jpg
+            376236474_7228877987163318_7257646588241330208_n.jpg
+            376251581_7228885523829231_5647916388908968544_n.jpg
+            376258472_7228882130496237_1879071460347063869_n.jpg
+            376269642_7228884890495961_2523967041520006589_n.jpg
+            376269926_7232289253488858_6141641760010166539_n.jpg
+            376271371_7228887043829079_5009823964228214961_n.jpg
+            376281619_7228880110496439_4807415270560161575_n.jpg
+            376860143_7228878370496613_648049614358167243_n.jpg
+            376874355_7228881920496258_6138688203418132225_n.jpg`
+
+            var kolo_3 = `375057485_7228883480496102_4948072847642393362_n.jpg
+            375061254_7232291830155267_8284817309548672709_n.jpg
+            375831242_7232287576822359_8613405140488834243_n.jpg
+            375836997_7228882660496184_8740625853034799194_n.jpg
+            375855999_7228887270495723_1106534234420878380_n.jpg
+            375858389_7228883663829417_4005672382341171786_n.jpg
+            375859318_7228877917163325_1233233802625861396_n.jpg
+            375859667_7232291063488677_8493657565411335797_n.jpg
+            375860480_7228879537163163_5304988127158153933_n.jpg
+            375863331_7228878280496622_6210706986701461515_n.jpg
+            375863530_7228883403829443_4160782797141391096_n.jpg
+            375866037_7232289083488875_8168644802650282243_n.jpg
+            375873191_7228885997162517_2405482187488329967_n.jpg
+            375898797_7228887603829023_150061381568365249_n.jpg
+            375898816_7228882887162828_3850494946696397949_n.jpg
+            375910033_7232289180155532_1430249006621458925_n.jpg
+            375910079_7228886990495751_4060089550958330317_n.jpg
+            375913825_7228885650495885_3132908092415730320_n.jpg
+            375924011_7232287180155732_243935921972880709_n.jpg
+            375949593_7228881823829601_7483487844338166439_n.jpg
+            375949917_7232291123488671_5378912160319934621_n.jpg
+            375954298_7228885157162601_8804028396857046981_n.jpg
+            375958460_7228881797162937_4066705107280626182_n.jpg
+            375966452_7232289723488811_490783516789373660_n.jpg
+            375970777_7228885597162557_8768414577334437910_n.jpg
+            375971544_7232289766822140_6911541932056607292_n.jpg
+            375975199_7228884953829288_6900118090868104714_n.jpg
+            375976748_7232287440155706_3933402398458208277_n.jpg
+            375977140_7232292443488539_5574035374780353269_n.jpg
+            375978411_7228887563829027_2891029784606722388_n.jpg
+            375982086_7228878333829950_1235399243061481278_n.jpg
+            375985101_7228878213829962_5962092867917170394_n.jpg
+            375989757_7228881080496342_5744618903306789666_n.jpg
+            375999440_7228882863829497_474429094841980163_n.jpg
+            375999463_7232291166822000_375871344303452422_n.jpg
+            376048479_7228882323829551_3653068499918098702_n.jpg
+            376057602_7228886447162472_4039172064557736122_n.jpg
+            376201124_7228883097162807_3264520812174933566_n.jpg
+            376228828_7228885850495865_6216581586989470919_n.jpg
+            376236474_7228877987163318_7257646588241330208_n.jpg
+            376251581_7228885523829231_5647916388908968544_n.jpg
+            376258472_7228882130496237_1879071460347063869_n.jpg
+            376269642_7228884890495961_2523967041520006589_n.jpg
+            376269926_7232289253488858_6141641760010166539_n.jpg
+            376271371_7228887043829079_5009823964228214961_n.jpg
+            376281619_7228880110496439_4807415270560161575_n.jpg
+            376860143_7228878370496613_648049614358167243_n.jpg
+            376874355_7228881920496258_6138688203418132225_n.jpg`
+
+            const highlightsData = [
+                {
+                    name: 'Travel',
+                    avatar: 'https://placekitten.com/60/60?image=1',
+                    stories: [
+                        {
+                            user: { name: 'Travel World', avatar: 'https://placekitten.com/32/32?image=1' },
+                            image: 'https://placekitten.com/375/667?image=2',
+                            duration: 5000
+                        }
+                    ]
+                },
+                {
+                    name: 'Kolo 1',
+                    avatar: 'https://placekitten.com/60/60?image=2',
+                    stories: kolo_1.split("\n").map(imageUrl => ({
+                        user: {
+                            name: 'Kolo_1',
+                            avatar: 'https://placekitten.com/32/32?image=1'
+                        },
+                        image: `./images/kolo_1/${imageUrl.trim()}`,
+                        duration: 5000
+                    }))
+                },
+                {
+                    name: 'Nature',
+                    avatar: 'https://placekitten.com/60/60?image=3',
+                    stories: [
+                        {
+                            user: { name: 'Nature Photography', avatar: 'https://placekitten.com/32/32?image=5' },
+                            image: 'https://placekitten.com/375/667?image=6',
+                            duration: 5000
+                        }
+                    ]
+                }
+            ];
+
+            var currentStorysLenght;
+            class StoryPlayer {
+                constructor(highlightsData, highlightsContainer, storiesContainer) {
+                    this.highlightsData = highlightsData;
+                    this.highlightsContainer = highlightsContainer;
+                    this.storiesContainer = storiesContainer;
+                    this.currentHighlightIndex = 0;
+                    this.currentStoryIndex = 0;
+                    this.progressInterval = null;
+
+                    this.renderHighlights();
+                    this.setupNavigation();
+                    this.selectHighlight(0);
+                }
+
+                renderHighlights() {
+                    $.each(this.highlightsData, (index, highlight) => {
+                        const $highlightElement = $('<div>').addClass('highlight-item');
+
+                        const $avatarElement = $('<img>')
+                            .attr('src', highlight.avatar)
+                            .addClass('highlight-avatar');
+
+                        const $nameElement = $('<span>')
+                            .text(highlight.name)
+                            .addClass('highlight-name');
+
+                        $highlightElement
+                            .append($avatarElement)
+                            .append($nameElement)
+                            .on('click', () => this.selectHighlight(index));
+
+                        this.highlightsContainer.append($highlightElement);
+                    });
+                }
+
+                selectHighlight(index) {
+                    this.currentHighlightIndex = index;
+                    this.currentStoryIndex = 0;
+
+                    // Update highlight avatars
+                    const highlightAvatars = root.find('.highlight-avatar');
+                    $.each(highlightAvatars, (i, avatar) => {
+                        $(avatar).toggleClass('active', i === index);
+                    });
+
+                    // Clear previous stories
+                    this.storiesContainer.empty();
+
+                    // Render stories for selected highlight
+                    const currentHighlight = this.highlightsData[index];
+                    this.renderStories(currentHighlight.stories);
+                    this.startStory(0);
+                }
+
+                renderStories(stories) {
+                    $.each(stories, (index, story) => {
+                        const $storyElement = $('<div>')
+                            .addClass('story')
+                            .addClass(index === 0 ? 'active' : '');
+
+                        const $progressContainer = $('<div>')
+                            .addClass('story-progress')
+                            .append($('<div>')
+                                .addClass('story-progress-bar')
+                                .attr('duration', story.duration));
+
+                        const $userElement = $('<div>')
+                            .addClass('story-user')
+                            .append(
+                                $('<img>')
+                                    .attr('src', story.user.avatar)
+                                    .addClass('story-user-avatar')
+                            )
+                            .append(
+                                $('<span>').text(story.user.name)
+                            );
+
+                        const $imageElement = $('<div>')
+                            .addClass('story-image')
+                            .css('backgroundImage', `url(${story.image})`);
+
+                        $storyElement
+                            .append($progressContainer)
+                            .append($userElement)
+                            .append($imageElement);
+
+                        this.storiesContainer.append($storyElement);
+                    });
+                }
+
+                setupNavigation() {
+                    const prevButton = root.find('#prevButton');
+                    const nextButton = root.find('#nextButton');
+
+                    prevButton.click(() => this.prevStory());
+                    nextButton.click(() => this.nextStory());
+
+                }
+
+                startStory(index) {
+                    if (this.progressInterval) {
+                        clearInterval(this.progressInterval);
+                    }
+
+                    const $stories = root.find('.story');
+                    $stories.removeClass('active');
+
+                    const $currentStory = $stories.eq(index);
+                    $currentStory.addClass('active');
+                    currentStorysLenght = $stories.length;
+
+                    const $progressBar = $currentStory.find('.story-progress-bar');
+                    this.currentProgressBar = $progressBar;
+
+                    let progress = 0;
+                    this.progressInterval = setInterval(() => {
+                        progress += 10;
+                        this.currentProgressBar.width(`${(progress /
+                            parseInt($progressBar.attr('duration'))) * 100}%`);
+
+                        if (progress >= parseInt($progressBar.attr('duration'))) {
+                            clearInterval(this.progressInterval);
+                            this.nextStory();
+                        }
+                    }, 10);
+                }
+
+                nextStory() {
+                    this.currentStoryIndex = (this.currentStoryIndex + 1) % currentStorysLenght;
+                    this.startStory(this.currentStoryIndex);
+                }
+
+                prevStory() {
+                    this.currentStoryIndex = (this.currentStoryIndex - 1 + currentStorysLenght)
+                        % currentStorysLenght;
+                    this.startStory(this.currentStoryIndex);
+                }
+            }
+
+
+            var highlightsNavbar = root.find('#highlightsNavbar');
+            var storiesContainer = root.find('.stories-container');
+
+            new StoryPlayer(highlightsData, highlightsNavbar, storiesContainer);
+        </script>
+    </body>
+
+
+</template>

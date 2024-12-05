@@ -1,13 +1,13 @@
 import { fetchComponent, parseElement, parseTemplateElement } from "../../js/index.js";
 
 
-export class Shop extends HTMLElement {
+export class Insta extends HTMLElement {
     constructor() {
         super();
     }
     connectedCallback() {
         if (!this.shadowRoot) {
-            fetchComponent('./components/shop.html').then((content) => {
+            fetchComponent('./components/games/instaStory.html').then((content) => {
                 const shadow = this.attachShadow({ mode: "open" });
                 if (content) {
                     this.innerHTML = '';
@@ -40,4 +40,4 @@ export class Shop extends HTMLElement {
 
 
 
-customElements.define('shop-component', Shop);
+customElements.define('insta-component', Insta);

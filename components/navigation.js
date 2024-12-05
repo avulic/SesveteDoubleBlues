@@ -1,19 +1,21 @@
-import { fetchComponent, parseElement } from "../js/index.js";
+import { fetchComponent, parseElement, parseTemplateElement } from "../../js/index.js";
 
-class Navigation extends HTMLElement {
+
+export class Navigation extends HTMLElement {
     constructor() {
         super();
-
     }
-
     connectedCallback() {
-        fetchComponent('./components/navigation.html').then((content) => {
-            if (content) {
-                this.innerHTML = content;
-                var element = parseElement(content)
-                this.executeScriptTag(element);
-            }
-        });
+        if (!this.shadowRoot) {
+            fetchComponent('./components/navigation.html').then((content) => {
+                const shadow = this.attachShadow({ mode: "open" });
+                if (content) {
+                    this.innerHTML = '';
+                    var template = parseTemplateElement(content)
+                    shadow.appendChild(template.content);
+                }
+            });
+        }
     }
 
     executeScriptTag(element) {
@@ -21,12 +23,11 @@ class Navigation extends HTMLElement {
         const scriptElements = element.getElementsByTagName('script');
         // Check if a script element exists.
         if (scriptElements.length > 1) {
-            for (var scriptElement of scriptElements) {
+            scriptElements.forEach((scriptElement) => {
                 const script = document.createElement('script');
                 script.textContent = scriptElement.textContent;
                 document.body.appendChild(script);
-            };
-            //scriptElements.remove();
+            });
         }
         if (scriptElements.length === 1) {
             const script = document.createElement('script');
@@ -35,5 +36,8 @@ class Navigation extends HTMLElement {
         }
     }
 }
+
+
+
 
 customElements.define('navigation-component', Navigation);

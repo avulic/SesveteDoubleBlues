@@ -12,41 +12,47 @@
 
     <script src="./components/slider/slider.js" type="module" defer></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <section class="container">
-        <div class="row" style="height:100vh">
+
+        <div class="row" style="margin: 0 auto;">
             <div class="col-md-8 offset-md-2">
                 <div class="bento-box" id="bento-box" style="height:100vh">
-                    <a href="#players">
-                        <div class="box box1">
-                            <h2>Playes</h2>
-                            <p>This is the content of box 1.</p>
-                        </div>
-                    </a>
 
-                    <div class="box box2">
+                    <div class="box box1" onclick="location.href='#players'">
+                        <h2>Playes</h2>
+                        <p>This is the content of box 1.</p>
+                    </div>
+
+
+                    <div class="box box2" onclick="location.href='#players'">
                         <h2>Start journey</h2>
                         <p>This is the content of box 2.</p>
                     </div>
-                    <div class="box box3">
+                    <div class="box box3" onclick="location.href='#players'">
                         <h2>Live</h2>
                         <p>This is the content of box 3.</p>
                     </div>
-                    <div class="box box4">
-                        <h2>Next game</h2>
+                    <div class="box box4" onclick="location.href='#shop'">
+                        <h2>Catalog</h2>
                         <p>This is the content of box 4.</p>
                     </div>
-                    <div class="box box6">
+
+                    <div class="box box6" onclick="location.href='#1_kolo'">
                         <h2>Pictures</h2>
                         <p>This is the content of box 6.</p>
                     </div>
-                    <div class="box box7">
-                        <a href="#stadion">
-                            <h2>Players</h2>
-                        </a>
+                    <div class="box box5" onclick="location.href='#shop'" style="grid-column: span 2;">
+                        <h2>NEsto</h2>
+                        <p>This is the content of box 4.</p>
+                    </div>
+                    <div class="box box7" onclick="location.href='#stadion'">
+                        <h2>Players</h2>
                     </div>
                     <div class="box-container">
                         <div class="box box-large box19">
-                            <slider-component></slider-component>
+                            <slider-component style="height: 100%;display: block;"></slider-component>
                         </div>
                         <div class="box-multi box20">
                             <div class="sub-box">
@@ -63,23 +69,69 @@
                                 </blockquote>
                                 <script async src="https://www.tiktok.com/embed.js"></script> -->
                             </div>
-                            <div class="sub-box"><a href="https://www.youtube.com/channel/UC5YtdLORMv56silqOop3qGA">
-                                    <img src="../images/social/youtube.png" alt=""></a></div>
-                            <div class="sub-box"><a href="https://www.instagram.com/sesvetedoubleblues/">
-                                    <img src="../images/social/instagram.png" alt=""></a></div>
-                            <div class="sub-box"><a href="https://afleurope.org/">
-                                    <img src="../images/social/afl.png" alt=""></a></div>
-                            <div class="sub-box"><a href="https://sanh.hr/"></a>
-                                <img src="../images/social/sanh.png" alt="">
+                            <div class="sub-box">
+                                <a href="https://www.youtube.com/channel/UC5YtdLORMv56silqOop3qGA">
+                                    <img src="../images/social/youtube.png" alt="">
+                                </a>
                             </div>
-                            <div class="sub-box"><a href="https://www.facebook.com/sesvetedoubleblues">
-                                    <img src="../images/social/face.png" alt=""></a></div>
+                            <div class="sub-box">
+                                <a href="https://www.instagram.com/sesvetedoubleblues/">
+                                    <img src="../images/social/instagram.png" alt="">
+                                </a>
+                            </div>
+                            <div class="sub-box">
+                                <a href="https://afleurope.org/">
+                                    <img src="../images/social/afl.png" alt="">
+                                </a>
+                            </div>
+                            <div class="sub-box">
+                                <a href="https://sanh.hr/">
+                                    <img src="../images/social/sanh.png" alt="">
+                                </a>
+                            </div>
+                            <div class="sub-box">
+                                <a href="https://www.facebook.com/sesvetedoubleblues">
+                                    <img src="../images/social/face.png" alt="">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+        <!-- <div class="drip-wrapper">
+            <div class="drip-top"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="cdrip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip"></div>
+            <div class="drip-bottom"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <defs>
+                    <filter id="goo">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"
+                            result="goo" />
+                        <feBlend in="SourceGraphic" in2="goo" />
+                    </filter>
+                </defs>
+            </svg>
+        </div>
+        <h1 class="text-light">Dripping CSS</h1>
+        <p class="text-light">Originally by Curel</p> -->
     </section>
+
+
+
 
     <script>
         var root = $(this.document.querySelector("about-component").shadowRoot);
@@ -103,6 +155,7 @@
                 self.removeClass("shake");
             }, 3000);
         });
+
     </script>
 
 </template>Photo by Ivo Brasil:
