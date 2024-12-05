@@ -286,7 +286,7 @@ this is my code:<template>
         const loader = new THREE.GLTFLoader();
 
         loader.load(
-            "../assets/stadion/export/web_stadion_v2.glb",
+            "./assets/stadion/export/web_stadion_v2.glb",
             function (gltf) {
                 gltf.scene.traverse((child) => {
                     if (child.isMesh) {
