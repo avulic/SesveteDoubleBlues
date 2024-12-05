@@ -1,4 +1,4 @@
-import { fetchComponent, parseElement, parseTemplateElement } from "../../js/index.js";
+import { fetchComponent, parseElement, parseTemplateElement } from "../js/index.js";
 
 
 export class Shop extends HTMLElement {
