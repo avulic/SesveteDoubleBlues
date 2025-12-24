@@ -6,12 +6,12 @@ function removeLoader() {
         loadingDiv.style.opacity = "0";
         setTimeout(() => {
             loadingDiv.remove(); // remove the loading div after the fade out
-        }, 500);
+        }, 100);
     }
 }
 
 window.addEventListener('load', function () {
-    setTimeout(removeLoader, 150);
+    setTimeout(removeLoader, 2);
 });
 
 // ********************************************************************************************************************
@@ -1404,9 +1404,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+window.addEventListener('load', () => {
+    luxy.init();
+});
 
-// Luxy + autoscroll
-luxy.init();
 
 const mainElement = document.querySelector('#main');
 const yearElement = document.getElementById('year');
@@ -2509,15 +2510,16 @@ document.addEventListener('DOMContentLoaded', function () {
 // Video playre
     
 function playVideo(videoId, title, channel) {
-    document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    const iframe = document.getElementById('videoFrame');
+
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+    iframe.style.display = 'block';
+
     document.getElementById('videoTitle').textContent = title;
     document.getElementById('videoChannel').textContent = channel;
 }
 
-// Initialize with a default video
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('videoFrame').src = 'about:blank';
-});
 
 // ********************************************************************************************************************
 
