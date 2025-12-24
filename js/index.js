@@ -651,7 +651,7 @@ function addEmtpyCard(element, container) {
 function addPlayerCard(element, container) {
     const card = $(`<div id="fut-card-container" class="${element.name}"></div>`);
     const card_image_container = $(`<div id="fut-card"></div>`);
-    const card_image = $(`<img src="${FUT_CARD_ASSET_URL}${element.name}.png" width="200" height="250">`);
+    const card_image = $(`<img src="${FUT_CARD_ASSET_URL}${element.name}.webp" width="200" height="250">`);
     
     card_image_container.append(card_image);
 
