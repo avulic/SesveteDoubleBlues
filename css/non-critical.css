@@ -586,10 +586,10 @@
 
 .story-highlight p {
     font-size: 0.8rem;
-    /* color: #001F3F;  */
+    color: #f0f0f0;
     margin-top: 5px;
     text-align: center;
-}
+} 
 
 /* Story Viewer */
 .story-viewer {
